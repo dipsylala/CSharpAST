@@ -9,44 +9,57 @@ namespace CSharpAST.Core.Processing;
 /// <summary>
 /// High-performance concurrent file processor for AST generation.
 /// Uses parallel processing, connection pooling, and optimized memory management.
+/// Supports multiple analyzers for multi-language projects.
 /// </summary>
 public class ConcurrentFileProcessor : IFileProcessor
 {
-    private readonly ISyntaxAnalyzer _syntaxAnalyzer;
+    private readonly List<ISyntaxAnalyzer> _analyzers;
     private readonly SemaphoreSlim _concurrencyLimiter;
     private readonly int _maxConcurrency;
 
     public ConcurrentFileProcessor(ISyntaxAnalyzer syntaxAnalyzer, int? maxConcurrency = null)
+        : this(new[] { syntaxAnalyzer }, maxConcurrency)
     {
-        _syntaxAnalyzer = syntaxAnalyzer;
+    }
+
+    public ConcurrentFileProcessor(IEnumerable<ISyntaxAnalyzer> analyzers, int? maxConcurrency = null)
+    {
+        _analyzers = analyzers?.ToList() ?? throw new ArgumentNullException(nameof(analyzers));
+        if (_analyzers.Count == 0)
+            throw new ArgumentException("At least one analyzer must be provided", nameof(analyzers));
+            
         _maxConcurrency = maxConcurrency ?? Math.Min(Environment.ProcessorCount * 2, 16);
         _concurrencyLimiter = new SemaphoreSlim(_maxConcurrency, _maxConcurrency);
     }
 
     public async Task<ASTAnalysis?> ProcessCSharpFileAsync(string filePath, CancellationToken cancellationToken = default)
     {
-        await _concurrencyLimiter.WaitAsync(cancellationToken);
+        // Legacy method for backward compatibility - delegates to ProcessFileAsync
+        return await ProcessFileAsync(filePath);
+    }
+
+    public async Task<ASTAnalysis?> ProcessFileAsync(string filePath)
+    {
+        await _concurrencyLimiter.WaitAsync();
         try
         {
             if (!File.Exists(filePath))
                 return null;
 
-            // Use ConfigureAwait(false) for better thread pool utilization
-            var sourceText = await File.ReadAllTextAsync(filePath, cancellationToken).ConfigureAwait(false);
-            var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, path: filePath);
-            var root = await syntaxTree.GetRootAsync(cancellationToken).ConfigureAwait(false);
+            // Find the appropriate analyzer for this file type
+            var analyzer = _analyzers.FirstOrDefault(a => a.SupportsFile(filePath));
+            if (analyzer == null)
+                return null;
 
-            return _syntaxAnalyzer.AnalyzeSyntaxTree(root, filePath);
+            // Use ConfigureAwait(false) for better thread pool utilization
+            var sourceText = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
+            
+            return await Task.Run(() => analyzer.AnalyzeFile(filePath, sourceText));
         }
         finally
         {
             _concurrencyLimiter.Release();
         }
-    }
-
-    public async Task<ASTAnalysis?> ProcessFileAsync(string filePath)
-    {
-        return await ProcessCSharpFileAsync(filePath);
     }
 
     public async Task<ASTAnalysis?> ProcessProjectAsync(string projectPath, CancellationToken cancellationToken = default)
@@ -58,10 +71,8 @@ public class ConcurrentFileProcessor : IFileProcessor
         if (string.IsNullOrEmpty(projectDir))
             return null;
 
-        // Get all C# files upfront
-        var csFiles = Directory.GetFiles(projectDir, "*.cs", SearchOption.AllDirectories)
-            .Where(f => !f.Contains("bin") && !f.Contains("obj"))
-            .ToList();
+        // Extract source files that are actually included in the project
+        var includedFiles = ProjectFileParser.GetIncludedSourceFiles(projectPath, _analyzers);
 
         var analysis = new ASTAnalysis
         {
@@ -75,14 +86,17 @@ public class ConcurrentFileProcessor : IFileProcessor
                 Properties = new Dictionary<string, object>
                 {
                     ["ProjectPath"] = projectPath,
-                    ["FileCount"] = csFiles.Count
+                    ["FileCount"] = includedFiles.Count,
+                    ["ProjectType"] = Path.GetExtension(projectPath),
+                    ["ParsedFromProjectFile"] = true,
+                    ["SupportedExtensions"] = string.Join(", ", _analyzers.SelectMany(a => GetSupportedExtensions(a)).Distinct())
                 },
                 Children = new List<ASTNode>()
             }
         };
 
         // Use concurrent processing with proper error handling
-        var fileResults = await ProcessFilesConcurrentlyAsync(csFiles, cancellationToken);
+        var fileResults = await ProcessFilesConcurrentlyAsync(includedFiles, cancellationToken);
         
         // Add results to analysis in deterministic order
         foreach (var result in fileResults.OrderBy(r => r.FilePath))
@@ -117,12 +131,9 @@ public class ConcurrentFileProcessor : IFileProcessor
         if (!File.Exists(solutionPath))
             return null;
 
-        var solutionDir = Path.GetDirectoryName(solutionPath);
-        if (string.IsNullOrEmpty(solutionDir))
-            return null;
-
-        // Find all project files
-        var projectFiles = Directory.GetFiles(solutionDir, "*.csproj", SearchOption.AllDirectories);
+        // Parse solution file to extract project files
+        var solutionInfo = SolutionFileParser.GetSolutionInfo(solutionPath);
+        var projectFiles = solutionInfo.ProjectFiles;
         
         var analysis = new ASTAnalysis
         {
@@ -132,11 +143,13 @@ public class ConcurrentFileProcessor : IFileProcessor
             {
                 Type = "SolutionRoot",
                 Kind = "Solution",
-                Text = $"Solution: {Path.GetFileName(solutionPath)}",
+                Text = $"Solution: {solutionInfo.Name}",
                 Properties = new Dictionary<string, object>
                 {
                     ["SolutionPath"] = solutionPath,
-                    ["ProjectCount"] = projectFiles.Length
+                    ["ProjectCount"] = projectFiles.Count,
+                    ["FormatVersion"] = solutionInfo.FormatVersion ?? "Unknown",
+                    ["VisualStudioVersion"] = solutionInfo.VisualStudioVersion ?? "Unknown"
                 },
                 Children = new List<ASTNode>()
             }
@@ -170,7 +183,7 @@ public class ConcurrentFileProcessor : IFileProcessor
                 {
                     Type = "ErrorNode",
                     Kind = "Error",
-                    Text = $"Failed to process project {result.ProjectFile}: {result.Error.Message}",
+                    Text = $"Failed to process project {Path.GetFileName(result.ProjectFile)}: {result.Error.Message}",
                     Properties = new Dictionary<string, object>
                     {
                         ["ProjectPath"] = result.ProjectFile,
@@ -202,7 +215,7 @@ public class ConcurrentFileProcessor : IFileProcessor
             {
                 try
                 {
-                    var analysis = await ProcessCSharpFileAsync(filePath).ConfigureAwait(false);
+                    var analysis = await ProcessFileAsync(filePath).ConfigureAwait(false);
                     results.Add((filePath, analysis, null));
                 }
                 catch (Exception ex)
@@ -238,7 +251,7 @@ public class ConcurrentFileProcessor : IFileProcessor
             {
                 try
                 {
-                    var analysis = await ProcessCSharpFileAsync(filePath, ct);
+                    var analysis = await ProcessFileAsync(filePath);
                     if (analysis != null)
                     {
                         concurrentResults.Add(analysis);
@@ -263,7 +276,40 @@ public class ConcurrentFileProcessor : IFileProcessor
     {
         return !string.IsNullOrEmpty(filePath) && 
                File.Exists(filePath) && 
-               Path.GetExtension(filePath).Equals(".cs", StringComparison.OrdinalIgnoreCase);
+               _analyzers.Any(analyzer => analyzer.SupportsFile(filePath));
+    }
+
+    public bool IsProjectSupported(string projectPath)
+    {
+        return !string.IsNullOrEmpty(projectPath) && 
+               File.Exists(projectPath) && 
+               _analyzers.Any(analyzer => analyzer.SupportsProject(projectPath));
+    }
+
+    private List<string> GetProjectFiles(string directoryPath)
+    {
+        // Find all potential project files and filter by analyzer support
+        var allFiles = Directory.GetFiles(directoryPath, "*.*proj", SearchOption.AllDirectories);
+        return allFiles.Where(file => _analyzers.Any(analyzer => analyzer.SupportsProject(file))).ToList();
+    }
+
+    private static IEnumerable<string> GetSupportedExtensions(ISyntaxAnalyzer analyzer)
+    {
+        // Helper method to extract supported extensions for display purposes
+        // This is a simplified approach - in a real implementation, you might want
+        // analyzers to expose their supported extensions directly
+        var extensions = new List<string>();
+        
+        var testExtensions = new[] { ".cs", ".vb", ".cshtml", ".razor" };
+        foreach (var ext in testExtensions)
+        {
+            if (analyzer.SupportsFile($"test{ext}"))
+            {
+                extensions.Add(ext);
+            }
+        }
+        
+        return extensions;
     }
 
     public void Dispose()

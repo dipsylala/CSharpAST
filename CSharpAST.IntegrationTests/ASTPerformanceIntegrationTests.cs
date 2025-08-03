@@ -134,7 +134,10 @@ public class ASTPerformanceIntegrationTests : TestBase
         foreach (var file in projectAnalysis.Files)
         {
             file.RootNode.Should().NotBeNull();
-            file.RootNode.Type.Should().Be("CompilationUnitSyntax");
+            // Root node type depends on file type - C# files have CompilationUnitSyntax, Razor files have RazorDocument
+            var expectedTypes = new[] { "CompilationUnitSyntax", "RazorDocument", "CompilationUnit" };
+            file.RootNode.Type.Should().BeOneOf(expectedTypes, 
+                "Root node should be appropriate for the file type");
         }
 
         _performanceLogger.LogInformation($"Project AST generation for {projectAnalysis.Files.Count} files " +

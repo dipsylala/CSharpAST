@@ -15,7 +15,7 @@ namespace CSharpAST.IntegrationTests
         public async Task ProcessRazorFile_ShouldGenerateValidAST()
         {
             // Arrange
-            var processor = new UnifiedFileProcessor(new SyntaxAnalyzer());
+            var processor = new UnifiedFileProcessor(new CSharpSyntaxAnalyzer());
             var razorFilePath = Path.Combine(_testFilesPath, "SingleFiles", "Razor", "RazorSample.cshtml");
             
             // Assert file exists
@@ -42,7 +42,7 @@ namespace CSharpAST.IntegrationTests
         public async Task ProcessRazorFile_ShouldExtractCSharpCodeBlocks()
         {
             // Arrange
-            var processor = new UnifiedFileProcessor(new SyntaxAnalyzer());
+            var processor = new UnifiedFileProcessor(new CSharpSyntaxAnalyzer());
             var razorFilePath = Path.Combine(_testFilesPath, "SingleFiles", "Razor", "RazorSample.cshtml");
 
             // Act
@@ -68,7 +68,7 @@ namespace CSharpAST.IntegrationTests
         public async Task ProcessRazorFile_ShouldExtractCSharpExpressions()
         {
             // Arrange
-            var processor = new UnifiedFileProcessor(new SyntaxAnalyzer());
+            var processor = new UnifiedFileProcessor(new CSharpSyntaxAnalyzer());
             var razorFilePath = Path.Combine(_testFilesPath, "SingleFiles", "Razor", "RazorSample.cshtml");
 
             // Act
@@ -97,7 +97,7 @@ namespace CSharpAST.IntegrationTests
         public async Task UnifiedFileProcessor_ShouldHandleBothCSharpAndRazor()
         {
             // Arrange
-            var processor = new UnifiedFileProcessor(new SyntaxAnalyzer());
+            var processor = new UnifiedFileProcessor(new CSharpSyntaxAnalyzer());
             var csharpFilePath = Path.Combine(_testFilesPath, "SingleFiles", "CSharp", "AsyncSample.cs");
             var razorFilePath = Path.Combine(_testFilesPath, "SingleFiles", "Razor", "RazorSample.cshtml");
 
@@ -131,10 +131,13 @@ namespace CSharpAST.IntegrationTests
                 // Act
                 await generator.GenerateASTAsync(razorFilePath, outputPath, "json");
 
-                // Assert - check what files were actually created
-                File.Exists(outputPath).Should().BeTrue("Output file should be created");
+                // Assert - check what files were actually created (ASTGenerator creates the filename)
+                var expectedFileName = Path.GetFileNameWithoutExtension(razorFilePath);
+                var outputFiles = Directory.GetFiles(outputPath, $"{expectedFileName}*.json");
+                outputFiles.Should().NotBeEmpty("Should create output file for RazorSample");
                 
-                var outputContent = await File.ReadAllTextAsync(outputPath);
+                var outputFile = outputFiles.First();
+                var outputContent = await File.ReadAllTextAsync(outputFile);
                 outputContent.Should().Contain("RazorDocument", "Output should contain Razor document structure");
                 outputContent.Should().Contain("CSharpCodeBlock", "Output should contain C# code blocks");
             }

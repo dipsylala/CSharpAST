@@ -1,0 +1,170 @@
+﻿{
+  "SourceFile": "E:\\Github\\CSharpAST\\CSharpAST.sln",
+  "GeneratedAt": "2025-08-03T23:18:47.4338713Z",
+  "RootNode": {
+    "Type": "SolutionRoot",
+    "Kind": "Solution",
+    "Text": "Solution: CSharpAST",
+    "Span": {
+      "Start": 0,
+      "End": 0,
+      "Length": 0
+    },
+    "Location": {
+      "Path": "",
+      "Span": {},
+      "HasMappedPath": false
+    },
+    "Properties": {
+      "SolutionPath": "E:\\Github\\CSharpAST\\CSharpAST.sln",
+      "ProjectCount": 6,
+      "FormatVersion": "12.00",
+      "VisualStudioVersion": "17"
+    },
+    "Children": [
+      {
+        "Type": "ProjectRoot",
+        "Kind": "Project",
+        "Text": "Project: CSharpAST.CLI.csproj",
+        "Span": {
+          "Start": 0,
+          "End": 0,
+          "Length": 0
+        },
+        "Location": {
+          "Path": "",
+          "Span": {},
+          "HasMappedPath": false
+        },
+        "Properties": {
+          "ProjectPath": "E:\\Github\\CSharpAST\\CSharpAST.CLI\\CSharpAST.CLI.csproj",
+          "FileCount": 1,
+          "ProjectType": ".csproj",
+          "ParsedFromProjectFile": true,
+          "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+        },
+        "Children": []
+      },
+      {
+        "Type": "ProjectRoot",
+        "Kind": "Project",
+        "Text": "Project: CSharpAST.Core.csproj",
+        "Span": {
+          "Start": 0,
+          "End": 0,
+          "Length": 0
+        },
+        "Location": {
+          "Path": "",
+          "Span": {},
+          "HasMappedPath": false
+        },
+        "Properties": {
+          "ProjectPath": "E:\\Github\\CSharpAST\\CSharpAST.Core\\CSharpAST.Core.csproj",
+          "FileCount": 13,
+          "ProjectType": ".csproj",
+          "ParsedFromProjectFile": true,
+          "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+        },
+        "Children": []
+      },
+      {
+        "Type": "ProjectRoot",
+        "Kind": "Project",
+        "Text": "Project: CSharpAST.IntegrationTests.csproj",
+        "Span": {
+          "Start": 0,
+          "End": 0,
+          "Length": 0
+        },
+        "Location": {
+          "Path": "",
+          "Span": {},
+          "HasMappedPath": false
+        },
+        "Properties": {
+          "ProjectPath": "E:\\Github\\CSharpAST\\CSharpAST.IntegrationTests\\CSharpAST.IntegrationTests.csproj",
+          "FileCount": 8,
+          "ProjectType": ".csproj",
+          "ParsedFromProjectFile": true,
+          "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+        },
+        "Children": []
+      },
+      {
+        "Type": "ProjectRoot",
+        "Kind": "Project",
+        "Text": "Project: CSharpAST.Performance.csproj",
+        "Span": {
+          "Start": 0,
+          "End": 0,
+          "Length": 0
+        },
+        "Location": {
+          "Path": "",
+          "Span": {},
+          "HasMappedPath": false
+        },
+        "Properties": {
+          "ProjectPath": "E:\\Github\\CSharpAST\\CSharpAST.Performance\\CSharpAST.Performance.csproj",
+          "FileCount": 1,
+          "ProjectType": ".csproj",
+          "ParsedFromProjectFile": true,
+          "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+        },
+        "Children": []
+      },
+      {
+        "Type": "ProjectRoot",
+        "Kind": "Project",
+        "Text": "Project: CSharpAST.PerformanceTest.csproj",
+        "Span": {
+          "Start": 0,
+          "End": 0,
+          "Length": 0
+        },
+        "Location": {
+          "Path": "",
+          "Span": {},
+          "HasMappedPath": false
+        },
+        "Properties": {
+          "ProjectPath": "E:\\Github\\CSharpAST\\CSharpAST.PerformanceTest\\CSharpAST.PerformanceTest.csproj",
+          "FileCount": 2,
+          "ProjectType": ".csproj",
+          "ParsedFromProjectFile": true,
+          "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+        },
+        "Children": []
+      },
+      {
+        "Type": "ProjectRoot",
+        "Kind": "Project",
+        "Text": "Project: CSharpAST.TestGeneration.csproj",
+        "Span": {
+          "Start": 0,
+          "End": 0,
+          "Length": 0
+        },
+        "Location": {
+          "Path": "",
+          "Span": {},
+          "HasMappedPath": false
+        },
+        "Properties": {
+          "ProjectPath": "E:\\Github\\CSharpAST\\CSharpAST.TestGeneration\\CSharpAST.TestGeneration.csproj",
+          "FileCount": 3,
+          "ProjectType": ".csproj",
+          "ParsedFromProjectFile": true,
+          "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+        },
+        "Children": []
+      }
+    ]
+  },
+  "AsyncMethods": [],
+  "Classes": [],
+  "Interfaces": [],
+  "Properties": [],
+  "UsingDirectives": []
+}

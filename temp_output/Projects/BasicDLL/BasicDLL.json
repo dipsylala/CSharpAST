@@ -1,0 +1,32 @@
+﻿{
+  "SourceFile": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\BasicDLL\\BasicDLL.csproj",
+  "GeneratedAt": "2025-08-03T23:18:47.5804842Z",
+  "RootNode": {
+    "Type": "ProjectRoot",
+    "Kind": "Project",
+    "Text": "Project: BasicDLL.csproj",
+    "Span": {
+      "Start": 0,
+      "End": 0,
+      "Length": 0
+    },
+    "Location": {
+      "Path": "",
+      "Span": {},
+      "HasMappedPath": false
+    },
+    "Properties": {
+      "ProjectPath": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\BasicDLL\\BasicDLL.csproj",
+      "FileCount": 3,
+      "ProjectType": ".csproj",
+      "ParsedFromProjectFile": true,
+      "SupportedExtensions": ".cs, .vb, .cshtml, .razor"
+    },
+    "Children": []
+  },
+  "AsyncMethods": [],
+  "Classes": [],
+  "Interfaces": [],
+  "Properties": [],
+  "UsingDirectives": []
+}

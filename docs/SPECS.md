@@ -35,10 +35,10 @@ CSharpAST/                              # Solution root
 │   ├── Analysis/                       # Syntax analyzers
 │   │   ├── ISyntaxAnalyzer.cs         # Core analyzer interface
 │   │   ├── SyntaxAnalyzer.cs          # Standard implementation
-│   │   └── OptimizedSyntaxAnalyzer.cs # High-performance implementation
+│   │   └── CSharpSyntaxAnalyzer.cs # High-performance implementation
 │   ├── Processing/                     # File/project processors
 │   │   ├── IFileProcessor.cs          # File processing interface
-│   │   ├── FileProcessor.cs           # Standard implementation
+│   │   ├── UnifiedFileProcessor.cs    # Multi-language implementation  
 │   │   └── ConcurrentFileProcessor.cs # Multi-threaded implementation
 │   ├── Output/                         # Output formatters
 │   │   ├── IOutputManager.cs          # Output interface
@@ -169,7 +169,7 @@ public interface ISyntaxAnalyzer
 
 **Implementations:**
 - `SyntaxAnalyzer`: Standard sequential implementation
-- `OptimizedSyntaxAnalyzer`: High-performance with memory pooling and conditional parallelization
+- `CSharpSyntaxAnalyzer`: High-performance with memory pooling and conditional parallelization
 
 ### IFileProcessor
 Interface for processing various file types.
@@ -205,7 +205,7 @@ public interface IFileProcessor : IDisposable
 ```
 
 **Implementations:**
-- `FileProcessor`: Sequential processing with basic error handling
+- `UnifiedFileProcessor`: Multi-language processor supporting C#, VB.NET, and Razor files with intelligent analyzer selection
 - `ConcurrentFileProcessor`: Multi-threaded with semaphore-based concurrency control
 
 ### IOutputManager
@@ -316,9 +316,10 @@ public class ConcurrentFileProcessor : IFileProcessor
 }
 ```
 
-#### OptimizedSyntaxAnalyzer
+#### CSharpSyntaxAnalyzer
+
 ```csharp
-public class OptimizedSyntaxAnalyzer : ISyntaxAnalyzer
+public class CSharpSyntaxAnalyzer : ISyntaxAnalyzer
 {
     // Memory pools for object reuse
     private readonly ArrayPool<ASTNode> _nodePool;

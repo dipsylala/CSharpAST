@@ -7,9 +7,9 @@ using System.Collections.Concurrent;
 namespace CSharpAST.Core.Analysis;
 
 /// <summary>
-/// High-performance syntax analyzer with memory pooling and optimized tree traversal.
+/// High-performance syntax analyzer with memory pooling and optimized tree traversal for C# files.
 /// </summary>
-public class OptimizedSyntaxAnalyzer : ISyntaxAnalyzer
+public class CSharpSyntaxAnalyzer : ISyntaxAnalyzer
 {
     private static readonly ArrayPool<ASTNode> _nodePool = ArrayPool<ASTNode>.Shared;
     private static readonly ConcurrentQueue<List<ASTNode>> _listPool = new();
@@ -408,5 +408,29 @@ public class OptimizedSyntaxAnalyzer : ISyntaxAnalyzer
         {
             // Ignore property extraction errors to ensure robustness
         }
+    }
+
+    public ASTAnalysis AnalyzeFile(string filePath, string content)
+    {
+        var syntaxTree = CSharpSyntaxTree.ParseText(content, path: filePath);
+        var root = syntaxTree.GetRoot();
+        return AnalyzeSyntaxTree(root, filePath);
+    }
+
+    public bool SupportsFile(string filePath)
+    {
+        var extension = Path.GetExtension(filePath).ToLowerInvariant();
+        return extension == ".cs";
+    }
+
+    public string[] GetSupportedProjectExtensions()
+    {
+        return new[] { ".csproj" };
+    }
+
+    public bool SupportsProject(string projectPath)
+    {
+        var extension = Path.GetExtension(projectPath).ToLowerInvariant();
+        return extension == ".csproj";
     }
 }

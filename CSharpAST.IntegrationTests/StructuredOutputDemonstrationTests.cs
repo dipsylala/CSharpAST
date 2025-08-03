@@ -136,4 +136,78 @@ public class StructuredOutputDemonstrationTests : TestBase
         var expectedProjectPath = Path.Combine(_outputBasePath, "ProjectAnalysis", "TestMethod");
         projectPath.Should().Be(expectedProjectPath);
     }
+
+    [Fact]
+    public async Task GenerateStructuredOutput_VBFile_ShouldCreateOrganizedOutput()
+    {
+        // Arrange - Test with a VB.NET file
+        var testFilePath = Path.Combine(_testFilesPath, "SingleFiles", "VB", "BookService.vb");
+        var outputDir = CreateStructuredOutputPath("SingleFiles/VB/BookService.vb", "GenerateStructuredOutput_VBFile");
+        
+        // Assert test file exists
+        File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
+
+        // Act - Generate AST with structured output
+        var generator = ASTGenerator.CreateUnified(verbose: true);
+        try
+        {
+            await generator.GenerateASTAsync(testFilePath, outputDir, "json");
+
+            // Assert - Verify structured output was created
+            Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
+            
+            // Verify the expected output file exists (ASTGenerator creates the filename)
+            var expectedFileName = Path.GetFileNameWithoutExtension(testFilePath);
+            var outputFiles = Directory.GetFiles(outputDir, $"{expectedFileName}*.json");
+            outputFiles.Should().NotBeEmpty("Should create output file for BookService");
+            
+            // Verify content
+            var outputFile = outputFiles.First();
+            var content = await File.ReadAllTextAsync(outputFile);
+            content.Should().Contain("BookService.vb", "Output should reference the source file");
+            content.Should().Contain("BookService", "Output should contain VB.NET class information");
+            
+            _logger.LogInformation($"Structured VB.NET output created at: {outputFile}");
+        }
+        finally
+        {
+            generator.Dispose();
+        }
+    }
+
+    [Fact]
+    public async Task GenerateStructuredOutput_VBApplication_ShouldCreateOrganizedOutput()
+    {
+        // Arrange - Test with a VB.NET application directory
+        var applicationPath = Path.Combine(_testFilesPath, "TestApplications", "VBConsoleApp");
+        var outputDir = CreateApplicationOutputPath("VBConsoleApp", "GenerateStructuredOutput_VBApplication");
+        
+        // Assert application directory exists
+        Directory.Exists(applicationPath).Should().BeTrue($"Test VB application should exist: {applicationPath}");
+
+        // Act - Generate AST for all files in the VB application
+        var generator = ASTGenerator.CreateUnified(verbose: true);
+        try
+        {
+            await generator.GenerateASTAsync(applicationPath, outputDir, "json");
+
+            // Assert - Verify structured output was created
+            Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
+            
+            // Verify the output directory structure matches TestApplications/VBConsoleApp/TestName
+            var expectedPath = Path.Combine(_outputBasePath, "TestApplications", "VBConsoleApp", "GenerateStructuredOutput_VBApplication");
+            outputDir.Should().Be(expectedPath, "Output path should follow structured pattern");
+            
+            // Verify output files were created
+            var outputFiles = Directory.GetFiles(outputDir, "*.json", SearchOption.AllDirectories);
+            outputFiles.Should().NotBeEmpty("Should create output files for the VB application");
+            
+            _logger.LogInformation($"Structured VB application output created at: {outputDir}");
+            _logger.LogInformation($"Generated {outputFiles.Length} output files");
+        }
+        finally
+        {
+            generator.Dispose();
+        }
+    }
 }

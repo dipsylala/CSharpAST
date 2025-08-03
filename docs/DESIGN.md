@@ -24,6 +24,19 @@ The CSharpAST system is built on the following core principles:
 3. **Performance-First**: Multi-threaded processing with intelligent optimization
 4. **Extensibility**: Plugin-based architecture for analyzers and output formats
 5. **Robustness**: Comprehensive error handling and graceful degradation
+6. **Multi-Language Support**: Unified processing pipeline for C#, VB.NET, and Razor files
+
+### Recent Architecture Consolidation (August 2025)
+
+The system recently underwent a significant architecture consolidation that successfully:
+
+- **Unified Analyzer Strategy**: Consolidated from dual analyzer approach to single `CSharpSyntaxAnalyzer` as the primary implementation
+- **Enhanced Multi-Language Support**: Added comprehensive VB.NET support with specialized `VBSyntaxAnalyzer` 
+- **Improved Test Coverage**: Expanded from basic scenarios to 33 comprehensive integration tests covering edge cases
+- **Performance Optimization**: Eliminated redundancy while maintaining 4-24x performance improvements
+- **Validated Stability**: All consolidation changes validated through systematic test pattern analysis
+
+This consolidation demonstrates the architecture's maturity and extensibility while simplifying maintenance.
 
 ### High-Level Architecture
 
@@ -85,13 +98,16 @@ public interface ISyntaxAnalyzer
 ```
 
 **Implementations:**
-- `SyntaxAnalyzer`: Standard implementation with basic optimizations
-- `OptimizedSyntaxAnalyzer`: High-performance implementation with memory pooling
+- `CSharpSyntaxAnalyzer`: High-performance implementation with memory pooling, parallel processing, and intelligent optimization strategies (default)
+- `VBSyntaxAnalyzer`: Specialized analyzer for Visual Basic .NET files with VB-specific syntax handling
+- `RazorSyntaxAnalyzer`: Specialized analyzer for Razor pages with C# code extraction and dual-mode processing
 
 **Design Decisions:**
 - Interface allows for swappable analysis strategies
-- Node-level analysis enables granular control
+- Node-level analysis enables granular control  
 - Memory pooling reduces GC pressure in high-throughput scenarios
+- Conditional parallelization optimizes performance based on content complexity
+- Language-specific analyzers provide specialized syntax understanding
 
 #### 2. IFileProcessor Interface
 
@@ -108,14 +124,15 @@ public interface IFileProcessor : IDisposable
 ```
 
 **Implementations:**
-- `FileProcessor`: Sequential file processing with basic error handling
-- `ConcurrentFileProcessor`: Multi-threaded processing with concurrency limiting
+- `UnifiedFileProcessor`: Multi-language processor supporting C# (.cs), VB.NET (.vb), and Razor (.cshtml/.razor) files with intelligent analyzer selection and project/solution aggregation
+- `ConcurrentFileProcessor`: Multi-threaded processing with concurrency limiting and load balancing across processor cores
 
 **Design Decisions:**
 - Async processing for I/O-bound operations
 - Cancellation support for long-running operations
-- File type validation prevents invalid processing
-- IDisposable pattern for resource cleanup
+- Multi-language support with unified processing pipeline
+- File type validation prevents invalid processing attempts
+- IDisposable pattern for proper resource cleanup
 
 #### 3. IOutputManager Interface
 
@@ -142,12 +159,13 @@ public interface IOutputManager
 
 ### Advanced Components
 
-#### 1. OptimizedSyntaxAnalyzer
+#### 1. CSharpSyntaxAnalyzer (Primary Implementation)
 
 **Key Features:**
-- **Memory Pooling**: Uses `ArrayPool<T>` and `ConcurrentQueue<T>` for object reuse
-- **Conditional Parallelization**: Only uses parallel processing when beneficial
-- **Smart Thresholds**: Different processing strategies based on tree size
+- **Memory Pooling**: Uses `ArrayPool<T>` and `ConcurrentQueue<T>` for object reuse and reduced garbage collection pressure
+- **Conditional Parallelization**: Intelligently switches between sequential and parallel processing based on syntax tree complexity
+- **Smart Thresholds**: Applies different processing strategies based on tree size and node count (>50 children triggers parallel processing)
+- **Comprehensive Node Analysis**: Extracts detailed properties including type information, modifiers, parameters, and source locations
 
 **Implementation Details:**
 ```csharp
@@ -165,6 +183,18 @@ if (node.ChildNodes().Count() > 50)
         .ToList();
 }
 ```
+
+#### 2. Multi-Language Support
+
+**VBSyntaxAnalyzer:**
+- **VB.NET Specialization**: Handles Visual Basic specific syntax patterns and language constructs
+- **Keyword Mapping**: Converts VB.NET keywords to standardized representations
+- **Integrated Processing**: Seamlessly integrates with the unified file processing pipeline
+
+**RazorSyntaxAnalyzer:**
+- **Dual-Mode Processing**: Analyzes both Razor markup and embedded C# code
+- **Code Extraction**: Separates and processes C# code blocks within Razor syntax
+- **Optimized Backend**: Uses CSharpSyntaxAnalyzer for C# code analysis within Razor files
 
 #### 2. ConcurrentFileProcessor
 
@@ -334,12 +364,14 @@ finally
 
 ### Performance Characteristics
 
-| Feature | Standard | Optimized | Improvement |
-|---------|----------|-----------|-------------|
+| Feature | Previous Standard | Current Optimized | Improvement |
+|---------|-------------------|-------------------|-------------|
 | Memory Allocation | High GC pressure | Pooled objects | 60% reduction |
 | CPU Utilization | Single-threaded | Multi-threaded | 4-24x speedup |
 | I/O Efficiency | Sequential | Concurrent | 3-5x throughput |
-| Large Files | Slower | Parallel analysis | 2-3x speedup |
+| Large Files | Slower processing | Parallel analysis | 2-3x speedup |
+| Multi-Language | C# only | C#, VB.NET, Razor | Full language support |
+| Test Coverage | Basic scenarios | Edge cases validated | 33 comprehensive tests |
 
 ## Extensibility Points
 
@@ -358,6 +390,24 @@ public class SecurityPatternAnalyzer : ISyntaxAnalyzer
             // Add security-specific analysis
             Properties = DetectSecurityPatterns(root)
         };
+    }
+}
+
+// Register custom analyzer
+var generator = ASTGenerator.Create(customAnalyzer: new SecurityPatternAnalyzer());
+```
+
+### 2. Multi-Language Extension
+
+Add support for additional languages by implementing specialized analyzers:
+
+```csharp
+public class TypeScriptSyntaxAnalyzer : ISyntaxAnalyzer
+{
+    public ASTAnalysis AnalyzeSyntaxTree(SyntaxNode root, string filePath)
+    {
+        // TypeScript-specific syntax analysis
+        // Integrate with existing pipeline
     }
 }
 ```

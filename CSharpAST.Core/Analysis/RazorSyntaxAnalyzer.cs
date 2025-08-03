@@ -10,7 +10,7 @@ namespace CSharpAST.Core.Analysis
     /// Analyzes Razor/CSHTML files to extract both Razor syntax and embedded C# code.
     /// Uses a simplified approach due to Razor API access limitations.
     /// </summary>
-    public class RazorSyntaxAnalyzer
+    public class RazorSyntaxAnalyzer : ISyntaxAnalyzer
     {
         private readonly RazorProjectEngine _razorEngine;
         private static readonly Regex CSharpCodePattern = new Regex(@"@\{([^}]*)\}", RegexOptions.Multiline | RegexOptions.Compiled);
@@ -235,7 +235,7 @@ namespace CSharpAST.Core.Analysis
             {
                 var syntaxTree = CSharpSyntaxTree.ParseText(generatedCode);
                 var root = syntaxTree.GetRoot();
-                var analyzer = new SyntaxAnalyzer();
+                var analyzer = new CSharpSyntaxAnalyzer();
                 var analysis = analyzer.AnalyzeSyntaxTree(root, filePath + "_generated.cs");
 
                 return new ASTNode
@@ -266,6 +266,52 @@ namespace CSharpAST.Core.Analysis
                     }
                 };
             }
+        }
+
+        // ISyntaxAnalyzer interface implementations
+        public ASTAnalysis AnalyzeSyntaxTree(SyntaxNode root, string filePath)
+        {
+            // For Razor files, we can't easily work with a pre-parsed syntax tree
+            // since Razor has its own parsing requirements. This method is mainly 
+            // for C# and VB.NET analyzers.
+            throw new NotSupportedException("RazorSyntaxAnalyzer requires file content analysis. Use AnalyzeFile instead.");
+        }
+
+        public ASTAnalysis AnalyzeFile(string filePath, string content)
+        {
+            var rootNode = AnalyzeRazorFile(filePath, content);
+            
+            return new ASTAnalysis
+            {
+                SourceFile = filePath,
+                GeneratedAt = DateTime.UtcNow,
+                RootNode = rootNode
+            };
+        }
+
+        public ASTNode AnalyzeNode(SyntaxNode node)
+        {
+            // For Razor files, we primarily work with text content rather than syntax nodes
+            // This method is mainly for C# and VB.NET analyzers.
+            throw new NotSupportedException("RazorSyntaxAnalyzer works with file content rather than individual syntax nodes.");
+        }
+
+        public bool SupportsFile(string filePath)
+        {
+            return IsRazorFile(filePath);
+        }
+
+        public string[] GetSupportedProjectExtensions()
+        {
+            // Razor files are typically part of web projects, which are usually C# projects
+            // But Razor itself doesn't have its own project type
+            return new string[0]; // Empty array - Razor files are included in other project types
+        }
+
+        public bool SupportsProject(string projectPath)
+        {
+            // Razor analyzer doesn't own any project file types
+            return false;
         }
     }
 }
