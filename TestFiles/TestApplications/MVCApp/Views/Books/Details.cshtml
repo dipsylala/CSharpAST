@@ -1,0 +1,305 @@
+@model BookDetailsViewModel
+@{
+    ViewData["Title"] = Model.Book.Title;
+}
+
+<div class="container">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-controller="Books" asp-action="Index">Books</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Book.Title</li>
+        </ol>
+    </nav>
+
+    <!-- Book Details -->
+    <div class="row">
+        <!-- Book Cover and Basic Info -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <img src="@Model.Book.CoverImageUrl" alt="@Model.Book.Title" 
+                             class="img-fluid rounded shadow" style="max-height: 400px;" />
+                    </div>
+                    
+                    <h4 class="card-title text-primary mb-2">@Model.Book.Title</h4>
+                    <p class="card-text text-muted mb-3">
+                        <i class="fas fa-user me-2"></i>by @Model.Book.Author
+                    </p>
+                    
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <span class="badge bg-info fs-6">@Model.Book.Genre</span>
+                        <span class="badge bg-secondary fs-6">@Model.Book.PublishedYear</span>
+                    </div>
+                    
+                    <div class="price-section mb-3">
+                        <h3 class="text-primary fw-bold mb-0">@Model.Book.FormattedPrice</h3>
+                        <small class="text-muted">Available in our library</small>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg" onclick="addToWishlist(@Model.Book.Id)">
+                            <i class="fas fa-heart me-2"></i>Add to Wishlist
+                        </button>
+                        <button class="btn btn-outline-success" onclick="reserveBook(@Model.Book.Id)">
+                            <i class="fas fa-bookmark me-2"></i>Reserve Book
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Information -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-primary">
+                                <i class="fas fa-info-circle me-2"></i>Book Information
+                            </h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>ISBN:</strong></td>
+                                    <td>@Model.Book.ISBN</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Published:</strong></td>
+                                    <td>@Model.Book.PublishedDate.ToString("MMMM dd, yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pages:</strong></td>
+                                    <td>@Model.Book.PageCount</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Genre:</strong></td>
+                                    <td>
+                                        <a asp-controller="Books" asp-action="Index" asp-route-genre="@Model.Book.Genre" 
+                                           class="text-decoration-none">@Model.Book.Genre</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status:</strong></td>
+                                    <td>
+                                        @if (Model.Book.IsAvailable)
+                                        {
+                                            <span class="badge bg-success">Available</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Not Available</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-primary">
+                                <i class="fas fa-star me-2"></i>Quick Actions
+                            </h5>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" onclick="shareBook()">
+                                    <i class="fas fa-share me-2"></i>Share this Book
+                                </button>
+                                <button class="btn btn-outline-info btn-sm" onclick="printDetails()">
+                                    <i class="fas fa-print me-2"></i>Print Details
+                                </button>
+                                <a asp-controller="Books" asp-action="Index" asp-route-searchTerm="@Model.Book.Author" 
+                                   class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-search me-2"></i>More by this Author
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <h5 class="text-primary">
+                            <i class="fas fa-align-left me-2"></i>Description
+                        </h5>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <p class="card-text">@Model.Book.Description</p>
+                                @if (Model.Book.Description.Length > 200)
+                                {
+                                    <div id="fullDescription" class="collapse">
+                                        <p class="card-text">
+                                            <!-- Additional description content would go here -->
+                                            This book offers deep insights into its subject matter and has been praised by readers and critics alike.
+                                        </p>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#fullDescription">
+                                        Read More <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Section -->
+                    <div class="mb-4">
+                        <h5 class="text-primary">
+                            <i class="fas fa-comments me-2"></i>Reader Reviews
+                        </h5>
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <div class="rating-summary">
+                                            <h3 class="text-warning mb-0">4.5</h3>
+                                            <div class="stars mb-2">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="fas fa-star @(i <= 4 ? "text-warning" : "text-muted")"></i>
+                                                }
+                                            </div>
+                                            <small class="text-muted">Based on 127 reviews</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="sample-review border-start ps-3">
+                                            <p class="mb-1">"An excellent read that provides valuable insights. Highly recommended!"</p>
+                                            <small class="text-muted">- Sarah J., Verified Reader</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="showAllReviews()">
+                                        View All Reviews
+                                    </button>
+                                    <button class="btn btn-outline-success btn-sm" onclick="writeReview()">
+                                        Write a Review
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Books Section -->
+    @if (Model.RelatedBooks.Any())
+    {
+        <section class="related-books mt-5">
+            <h3 class="mb-4">
+                <i class="fas fa-book me-2 text-primary"></i>
+                Related Books in <span class="text-primary">@Model.Book.Genre</span>
+            </h3>
+            
+            <div class="row">
+                @foreach (var relatedBook in Model.RelatedBooks)
+                {
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card h-100 shadow-sm related-book-card">
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <img src="@relatedBook.CoverImageUrl" alt="@relatedBook.Title" 
+                                     class="img-fluid" style="max-height: 130px;" />
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title">@relatedBook.Title</h6>
+                                <p class="card-text text-muted small mb-2">@relatedBook.Author</p>
+                                <p class="card-text small flex-grow-1">
+                                    @(relatedBook.Description.Length > 80 ? 
+                                      relatedBook.Description.Substring(0, 80) + "..." : 
+                                      relatedBook.Description)
+                                </p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong class="text-primary">@relatedBook.FormattedPrice</strong>
+                                        <small class="text-muted">@relatedBook.PublishedYear</small>
+                                    </div>
+                                    <a asp-controller="Books" asp-action="Details" asp-route-id="@relatedBook.Id" 
+                                       class="btn btn-outline-primary btn-sm w-100">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function addToWishlist(bookId) {
+            // Simulate adding to wishlist
+            alert('Book added to your wishlist!');
+            // In a real app, this would make an AJAX call to the server
+        }
+
+        function reserveBook(bookId) {
+            // Simulate book reservation
+            if (confirm('Would you like to reserve this book?')) {
+                alert('Book reserved successfully! You will be notified when it becomes available.');
+                // In a real app, this would make an AJAX call to the server
+            }
+        }
+
+        function shareBook() {
+            // Simulate sharing functionality
+            if (navigator.share) {
+                navigator.share({
+                    title: '@Model.Book.Title',
+                    text: 'Check out this book: @Model.Book.Title by @Model.Book.Author',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Book link copied to clipboard!');
+                });
+            }
+        }
+
+        function printDetails() {
+            window.print();
+        }
+
+        function showAllReviews() {
+            alert('This would show all reviews in a modal or new page.');
+        }
+
+        function writeReview() {
+            alert('This would open a review form.');
+        }
+
+        $(document).ready(function() {
+            // Animate related book cards on hover
+            $('.related-book-card').hover(
+                function() { $(this).addClass('shadow-lg').css('transform', 'translateY(-3px)'); },
+                function() { $(this).removeClass('shadow-lg').css('transform', 'translateY(0)'); }
+            );
+        });
+    </script>
+}
+
+<style>
+    .related-book-card {
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .rating-summary .stars {
+        font-size: 1.2em;
+    }
+    
+    .sample-review {
+        border-left: 3px solid #007bff !important;
+    }
+    
+    @media print {
+        .btn, .breadcrumb, nav {
+            display: none !important;
+        }
+    }
+</style>

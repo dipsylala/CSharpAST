@@ -1,0 +1,73 @@
+@model List<string>
+
+@{
+    ViewData["Title"] = "Sample Razor Page";
+    var currentUser = "John Doe";
+    var items = Model ?? new List<string> { "Item 1", "Item 2", "Item 3" };
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <style>
+        .highlight { background-color: yellow; }
+        .user-info { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Our Sample Page</h1>
+    
+    <div class="user-info">
+        <p>Hello, @currentUser!</p>
+        <p>Today is @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+        <p>Model contains @Model.Count items</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <h2>Your Items:</h2>
+        <ul>
+            @foreach (var item in items)
+            {
+                <li class="@(item.Contains("2") ? "highlight" : "")">
+                    @item - Added on @DateTime.Now.ToString("MM/dd/yyyy")
+                </li>
+            }
+        </ul>
+        
+        <p>Total items: @Model.Count</p>
+        <p>First item: @(Model.FirstOrDefault() ?? "None")</p>
+        <p>Last item: @(Model.LastOrDefault() ?? "None")</p>
+    }
+    else
+    {
+        <p>No items found.</p>
+    }
+
+    @{
+        var calculation = Model.Count * 2;
+        var message = calculation > 5 ? "Many items" : "Few items";
+    }
+    
+    <div>
+        <p>Calculation result: @calculation</p>
+        <p>Status: @message</p>
+        <p>Complex expression: @(items.Count > 0 ? $"Found {items.Count} items" : "Empty list")</p>
+    </div>
+
+    <script>
+        // Some JavaScript
+        console.log('Page loaded with @items.Count items');
+        
+        @if (items.Count > 2)
+        {
+            <text>
+            document.addEventListener('DOMContentLoaded', function() {
+                alert('You have many items: @items.Count');
+            });
+            </text>
+        }
+    </script>
+</body>
+</html>
