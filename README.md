@@ -95,17 +95,17 @@ CSharpAST/
 
 ## Performance Optimizations
 
-The tool includes a high-performance `OptimizedASTGenerator` with multi-threading capabilities:
+The tool includes high-performance concurrent processing capabilities through the `ASTGenerator` with configurable processing modes:
 
-- **4.65x overall speedup** on average across all scenarios
+- **4.65x overall speedup** on average across all scenarios with concurrent processing
 - **24x faster project-level processing** compared to sequential analysis
 - **Intelligent concurrency scaling** (optimal at 4-8 threads)
-- **Memory-optimized processing** with object pooling and ArrayPool usage
+- **Memory-optimized processing** with concurrent file processing and load balancing
 
 ### Performance Comparison
 
-| Scenario | Standard | Optimized | Speedup |
-|----------|----------|-----------|---------|
+| Scenario | Sequential | Concurrent | Speedup |
+|----------|------------|------------|---------|
 | Single File (4KB) | 17.3ms | 8.3ms | 2.08x |
 | Multiple Files (12 files) | 116.7ms | 49ms | 3.35x |
 | Project Analysis | 113.7ms | 4.7ms | **24.36x** |
@@ -164,7 +164,7 @@ dotnet test CSharpAST.IntegrationTests
 
 The `CSharpAST.PerformanceTest` application provides comprehensive performance analysis including:
 
-- **Standard vs Optimized Benchmarks**: Compare single-threaded vs multi-threaded performance
+- **Sequential vs Concurrent Benchmarks**: Compare single-threaded vs multi-threaded performance
 - **Thread Scaling Analysis**: Test performance across different thread counts (1-32 threads)
 - **Memory Usage Monitoring**: Track memory consumption during processing
 - **Concurrency Benefits**: Analyze optimal thread counts for your hardware

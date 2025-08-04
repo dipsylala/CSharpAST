@@ -43,8 +43,7 @@ CSharpAST/                              # Solution root
 │   ├── Output/                         # Output formatters
 │   │   ├── IOutputManager.cs          # Output interface
 │   │   └── OutputManager.cs           # Multi-format implementation
-│   ├── ASTGenerator.cs                # Main orchestration class
-│   ├── OptimizedASTGenerator.cs       # High-performance orchestrator
+│   ├── ASTGenerator.cs                # Main orchestration class with concurrent processing
 │   └── Models.cs                      # Data transfer objects
 ├── CSharpAST.CLI/                     # Command-line interface
 ├── CSharpAST.TestGeneration/          # Test scaffolding generator
@@ -268,33 +267,40 @@ public class ASTGenerator
 }
 ```
 
-### OptimizedASTGenerator
-High-performance implementation with multi-threading.
+### ASTGenerator Processing Modes
+The ASTGenerator supports configurable processing modes for different performance requirements.
 
 ```csharp
-public class OptimizedASTGenerator : IDisposable
+public class ASTGenerator : IDisposable
 {
-    // Performance optimizations:
-    // - Concurrent file processing
-    // - Memory pooling
-    // - Intelligent batching
-    // - Resource management
+    public enum ProcessingMode
+    {
+        Unified,      // Sequential processing, supports all file types
+        Concurrent    // Concurrent processing, supports all file types
+    }
 
-    public OptimizedASTGenerator(bool verbose = false, int? maxConcurrency = null);
+    // Constructor with processing mode selection
+    public ASTGenerator(ProcessingMode mode = ProcessingMode.Concurrent, 
+                       bool verbose = false, int? maxConcurrency = null);
     
-    // Same interface as ASTGenerator but with performance optimizations
+    // Factory method for sequential processing
+    public static ASTGenerator CreateUnified(bool verbose = false, int? maxConcurrency = null);
+    
+    // Main analysis methods
     public async Task GenerateASTAsync(string inputPath, string outputPath, string format);
+    public async Task<ASTAnalysis?> GenerateFromFileAsync(string filePath);
+    public async Task<ProjectAnalysis?> GenerateFromProjectAsync(string projectPath);
 }
 ```
 
 ### Performance Characteristics
 
-| Component | Standard | Optimized | Improvement |
-|-----------|----------|-----------|-------------|
+| Component | Sequential | Concurrent | Improvement |
+|-----------|------------|------------|-------------|
 | Single File (5KB) | 8-17ms | 1-8ms | 2-3x faster |
 | Multiple Files | Sequential | Concurrent | 2-4x faster |
 | Project Analysis | 115ms | 5ms | 23x faster |
-| Memory Usage | High GC | Pooled objects | 60% reduction |
+| Memory Usage | Standard | Optimized batching | Improved efficiency |
 | CPU Utilization | Single core | Multi-core | Scales with cores |
 
 ### Concurrency Model
@@ -365,7 +371,7 @@ public async Task GenerateASTAsync(string inputPath, string outputPath, string f
 #### Performance Benchmarking
 ```csharp
 /// <summary>
-/// Compare standard vs optimized performance
+/// Compare sequential vs concurrent performance
 /// </summary>
 public async Task<BenchmarkSummary> RunBenchmarksAsync(string testPath, int iterations = 3);
 
@@ -533,8 +539,8 @@ DataProcessor
 - **Optimal Thread Count**: 4-8 threads for most scenarios
 
 #### Project-Level Processing
-- **Standard Implementation**: 100-200ms for typical projects
-- **Optimized Implementation**: 5-15ms for same projects
+- **Sequential Implementation**: 100-200ms for typical projects
+- **Concurrent Implementation**: 5-15ms for same projects
 - **Speedup Factor**: 10-40x improvement depending on project size
 
 ### Performance Configuration
@@ -544,14 +550,12 @@ DataProcessor
 // Default concurrency calculation
 int defaultConcurrency = Math.Min(Environment.ProcessorCount * 2, 16);
 
-// Custom concurrency for specific scenarios
-var optimizedGenerator = new OptimizedASTGenerator(maxConcurrency: 8);
-```
+// Custom concurrency for concurrent processing
+var generator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent, maxConcurrency: 8);
 
-#### Memory Pool Configuration
-```csharp
-// Automatic memory pool management
-private readonly ArrayPool<ASTNode> _nodePool = ArrayPool<ASTNode>.Shared;
+// Sequential processing when needed
+var sequentialGenerator = ASTGenerator.CreateUnified();
+```
 
 // Pool size thresholds
 private const int MAX_POOLED_LIST_SIZE = 100;
@@ -652,12 +656,12 @@ CSHARPAST_LOG_LEVEL=Information     # Logging level
 ```csharp
 [Test]
 [Performance]
-public async Task OptimizedGenerator_MaintainsPerformance_OnLargeProjects()
+public async Task ConcurrentGenerator_MaintainsPerformance_OnLargeProjects()
 {
-    var generator = new OptimizedASTGenerator();
+    var generator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
     var stopwatch = Stopwatch.StartNew();
     
-    var result = await generator.ProcessProjectAsync("LargeProject.csproj");
+    var result = await generator.GenerateFromProjectAsync("LargeProject.csproj");
     stopwatch.Stop();
     
     Assert.That(stopwatch.ElapsedMilliseconds, Is.LessThan(20), 
