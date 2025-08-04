@@ -46,8 +46,8 @@ public class ConcurrentFileProcessor : IFileProcessor
             if (!File.Exists(filePath))
                 return null;
 
-            // Find the appropriate analyzer for this file type
-            var analyzer = _analyzers.FirstOrDefault(a => a.SupportsFile(filePath));
+            // Find the appropriate analyzer for this file type using capabilities
+            var analyzer = _analyzers.FirstOrDefault(a => a.Capabilities.SupportsFile(filePath));
             if (analyzer == null)
                 return null;
 
@@ -74,6 +74,17 @@ public class ConcurrentFileProcessor : IFileProcessor
         // Extract source files that are actually included in the project
         var includedFiles = ProjectFileParser.GetIncludedSourceFiles(projectPath, _analyzers);
 
+        // Debug: Log the number of files found
+        Console.WriteLine($"Debug: Found {includedFiles.Count} files in project {Path.GetFileName(projectPath)}");
+        foreach (var file in includedFiles.Take(5)) // Show first 5 files
+        {
+            Console.WriteLine($"Debug: File found: {Path.GetFileName(file)}");
+        }
+        if (includedFiles.Count > 5)
+        {
+            Console.WriteLine($"Debug: ... and {includedFiles.Count - 5} more files");
+        }
+
         var analysis = new ASTAnalysis
         {
             SourceFile = projectPath,
@@ -97,6 +108,9 @@ public class ConcurrentFileProcessor : IFileProcessor
 
         // Use concurrent processing with proper error handling
         var fileResults = await ProcessFilesConcurrentlyAsync(includedFiles, cancellationToken);
+        
+        // Debug: Log processing results
+        Console.WriteLine($"Debug: Processed {fileResults.Count} files, successful: {fileResults.Count(r => r.Analysis != null)}, errors: {fileResults.Count(r => r.Error != null)}");
         
         // Add results to analysis in deterministic order
         foreach (var result in fileResults.OrderBy(r => r.FilePath))
@@ -200,31 +214,20 @@ public class ConcurrentFileProcessor : IFileProcessor
     private async Task<List<(string FilePath, ASTAnalysis? Analysis, Exception? Error)>> ProcessFilesConcurrentlyAsync(
         List<string> filePaths, CancellationToken cancellationToken)
     {
-        var results = new ConcurrentBag<(string FilePath, ASTAnalysis? Analysis, Exception? Error)>();
-        
-        // Create partitions for better load balancing
-        var partitioner = Partitioner.Create(filePaths, true);
-        
-        await Task.Run(() =>
+        var tasks = filePaths.Select(async filePath =>
         {
-            Parallel.ForEach(partitioner, new ParallelOptions
+            try
             {
-                CancellationToken = cancellationToken,
-                MaxDegreeOfParallelism = _maxConcurrency
-            }, async filePath =>
+                var analysis = await ProcessFileAsync(filePath).ConfigureAwait(false);
+                return (filePath, analysis, (Exception?)null);
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    var analysis = await ProcessFileAsync(filePath).ConfigureAwait(false);
-                    results.Add((filePath, analysis, null));
-                }
-                catch (Exception ex)
-                {
-                    results.Add((filePath, null, ex));
-                }
-            });
-        }, cancellationToken);
+                return (filePath, (ASTAnalysis?)null, ex);
+            }
+        });
 
+        var results = await Task.WhenAll(tasks);
         return results.ToList();
     }
 
@@ -276,40 +279,27 @@ public class ConcurrentFileProcessor : IFileProcessor
     {
         return !string.IsNullOrEmpty(filePath) && 
                File.Exists(filePath) && 
-               _analyzers.Any(analyzer => analyzer.SupportsFile(filePath));
+               _analyzers.Any(analyzer => analyzer.Capabilities.SupportsFile(filePath));
     }
 
     public bool IsProjectSupported(string projectPath)
     {
         return !string.IsNullOrEmpty(projectPath) && 
                File.Exists(projectPath) && 
-               _analyzers.Any(analyzer => analyzer.SupportsProject(projectPath));
+               _analyzers.Any(analyzer => analyzer.Capabilities.SupportsProject(projectPath));
     }
 
     private List<string> GetProjectFiles(string directoryPath)
     {
-        // Find all potential project files and filter by analyzer support
+        // Find all potential project files and filter by analyzer support using capabilities
         var allFiles = Directory.GetFiles(directoryPath, "*.*proj", SearchOption.AllDirectories);
-        return allFiles.Where(file => _analyzers.Any(analyzer => analyzer.SupportsProject(file))).ToList();
+        return allFiles.Where(file => _analyzers.Any(analyzer => analyzer.Capabilities.SupportsProject(file))).ToList();
     }
 
     private static IEnumerable<string> GetSupportedExtensions(ISyntaxAnalyzer analyzer)
     {
-        // Helper method to extract supported extensions for display purposes
-        // This is a simplified approach - in a real implementation, you might want
-        // analyzers to expose their supported extensions directly
-        var extensions = new List<string>();
-        
-        var testExtensions = new[] { ".cs", ".vb", ".cshtml", ".razor" };
-        foreach (var ext in testExtensions)
-        {
-            if (analyzer.SupportsFile($"test{ext}"))
-            {
-                extensions.Add(ext);
-            }
-        }
-        
-        return extensions;
+        // Return the supported extensions directly from capabilities
+        return analyzer.Capabilities.SupportedFileExtensions;
     }
 
     public void Dispose()

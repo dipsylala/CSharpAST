@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSharpAST.Core\CSharpAST.Core.csproj" />
-    <ProjectReference Include="..\CSharpAST.TestGeneration\CSharpAST.TestGeneration.csproj" />
     <ProjectReference Include="..\CSharpAST.CLI\CSharpAST.CLI.csproj" />
   </ItemGroup>
 

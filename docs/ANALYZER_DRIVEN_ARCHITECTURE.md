@@ -77,7 +77,7 @@ public interface ISyntaxAnalyzer
 ### Before (Hard-Coded)
 ```csharp
 // Hard-coded in file processors
-var projectExtensions = new[] { "*.csproj", "*.vbproj", "*.fsproj", "*.proj" };
+var projectExtensions = new[] { "*.csproj", "*.vbproj", "*.proj" };
 var isProjectFile = extension == ".csproj" || extension == ".vbproj";
 ```
 

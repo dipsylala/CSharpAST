@@ -108,11 +108,10 @@ class Program
             aliases: new[] { "--processor", "-p" },
             description: "Processing mode:\n" +
                         "  • unified: Sequential multi-language processing\n" +
-                        "  • concurrent: Parallel multi-language processing\n" +
-                        "  • optimized: C#-only optimized processing",
+                        "  • concurrent: Parallel multi-language processing",
             getDefaultValue: () => "concurrent");
 
-        option.FromAmong("unified", "concurrent", "optimized");
+        option.FromAmong("unified", "concurrent");
         return option;
     }
 
@@ -137,13 +136,14 @@ class Program
         try
         {
             // Create appropriate AST generator based on processor type
-            var generator = processor switch
+            var processingMode = processor switch
             {
-                "unified" => ASTGenerator.CreateUnified(verbose),
-                "concurrent" => ASTGenerator.CreateConcurrentUnified(verbose, concurrency),
-                "optimized" => ASTGenerator.CreateOptimized(verbose, concurrency),
+                "unified" => ASTGenerator.ProcessingMode.Unified,
+                "concurrent" => ASTGenerator.ProcessingMode.Concurrent,
                 _ => throw new ArgumentException($"Unknown processor type: {processor}")
             };
+
+            var generator = new ASTGenerator(processingMode, verbose, concurrency);
 
             if (verbose)
             {

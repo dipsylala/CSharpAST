@@ -15,6 +15,18 @@ public class CSharpSyntaxAnalyzer : ISyntaxAnalyzer
     private static readonly ConcurrentQueue<List<ASTNode>> _listPool = new();
     private static readonly ConcurrentQueue<Dictionary<string, object>> _dictPool = new();
 
+    /// <summary>
+    /// Gets the capabilities of this C# analyzer
+    /// </summary>
+    public AnalyzerCapabilities Capabilities { get; } = new AnalyzerCapabilities
+    {
+        Name = "C# Syntax Analyzer",
+        Description = "Analyzes C# source code and generates Abstract Syntax Trees using Roslyn",
+        Language = "C#",
+        SupportedFileExtensions = new[] { ".cs" },
+        SupportedProjectExtensions = new[] { ".csproj" }
+    };
+
     public ASTAnalysis AnalyzeSyntaxTree(SyntaxNode root, string filePath)
     {
         var analysis = new ASTAnalysis
@@ -23,9 +35,6 @@ public class CSharpSyntaxAnalyzer : ISyntaxAnalyzer
             GeneratedAt = DateTime.UtcNow,
             RootNode = ConvertToASTNode(root)
         };
-
-        // Extract high-level constructs for backward compatibility
-        ExtractHighLevelConstructs(root, analysis);
 
         return analysis;
     }
@@ -145,134 +154,6 @@ public class CSharpSyntaxAnalyzer : ISyntaxAnalyzer
         {
             ReturnPooledDictionary(properties);
         }
-    }
-
-    private void ExtractHighLevelConstructs(SyntaxNode root, ASTAnalysis analysis)
-    {
-        // Use parallel LINQ for better performance on large files
-        var descendants = root.DescendantNodes().ToList();
-
-        if (descendants.Count > 1000)
-        {
-            // Parallel processing for large files
-            var asyncMethods = descendants.AsParallel()
-                .OfType<MethodDeclarationSyntax>()
-                .Where(m => m.Modifiers.Any(mod => mod.IsKind(SyntaxKind.AsyncKeyword)))
-                .Select(CreateAsyncMethodInfo)
-                .ToList();
-
-            var classes = descendants.AsParallel()
-                .OfType<ClassDeclarationSyntax>()
-                .Select(CreateClassInfo)
-                .ToList();
-
-            var interfaces = descendants.AsParallel()
-                .OfType<InterfaceDeclarationSyntax>()
-                .Select(CreateInterfaceInfo)
-                .ToList();
-
-            var properties = descendants.AsParallel()
-                .OfType<PropertyDeclarationSyntax>()
-                .Select(CreatePropertyInfo)
-                .ToList();
-
-            var usingDirectives = descendants.AsParallel()
-                .OfType<UsingDirectiveSyntax>()
-                .Select(CreateUsingDirectiveInfo)
-                .ToList();
-
-            analysis.AsyncMethods.AddRange(asyncMethods);
-            analysis.Classes.AddRange(classes);
-            analysis.Interfaces.AddRange(interfaces);
-            analysis.Properties.AddRange(properties);
-            analysis.UsingDirectives.AddRange(usingDirectives);
-        }
-        else
-        {
-            // Sequential processing for smaller files
-            analysis.AsyncMethods.AddRange(descendants.OfType<MethodDeclarationSyntax>()
-                .Where(m => m.Modifiers.Any(mod => mod.IsKind(SyntaxKind.AsyncKeyword)))
-                .Select(CreateAsyncMethodInfo));
-
-            analysis.Classes.AddRange(descendants.OfType<ClassDeclarationSyntax>()
-                .Select(CreateClassInfo));
-
-            analysis.Interfaces.AddRange(descendants.OfType<InterfaceDeclarationSyntax>()
-                .Select(CreateInterfaceInfo));
-
-            analysis.Properties.AddRange(descendants.OfType<PropertyDeclarationSyntax>()
-                .Select(CreatePropertyInfo));
-
-            analysis.UsingDirectives.AddRange(descendants.OfType<UsingDirectiveSyntax>()
-                .Select(CreateUsingDirectiveInfo));
-        }
-    }
-
-    private AsyncMethodInfo CreateAsyncMethodInfo(MethodDeclarationSyntax method)
-    {
-        var awaitExpressions = method.DescendantNodes()
-            .OfType<AwaitExpressionSyntax>()
-            .Select(await => await.Expression.ToString())
-            .ToList();
-
-        return new AsyncMethodInfo
-        {
-            Name = method.Identifier.ValueText,
-            ReturnType = method.ReturnType.ToString(),
-            Parameters = method.ParameterList.Parameters.Select(p => $"{p.Type} {p.Identifier}").ToList(),
-            AwaitExpressions = awaitExpressions,
-            LineNumber = method.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1
-        };
-    }
-
-    private ClassInfo CreateClassInfo(ClassDeclarationSyntax classDecl)
-    {
-        return new ClassInfo
-        {
-            Name = classDecl.Identifier.ValueText,
-            Modifiers = classDecl.Modifiers.Select(m => m.ValueText).ToList(),
-            BaseTypes = classDecl.BaseList?.Types.Select(t => t.ToString()).ToList() ?? new List<string>(),
-            Methods = classDecl.Members.OfType<MethodDeclarationSyntax>().Select(m => m.Identifier.ValueText).ToList(),
-            Properties = classDecl.Members.OfType<PropertyDeclarationSyntax>().Select(p => p.Identifier.ValueText).ToList(),
-            LineNumber = classDecl.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1
-        };
-    }
-
-    private InterfaceInfo CreateInterfaceInfo(InterfaceDeclarationSyntax interfaceDecl)
-    {
-        return new InterfaceInfo
-        {
-            Name = interfaceDecl.Identifier.ValueText,
-            Methods = interfaceDecl.Members.OfType<MethodDeclarationSyntax>().Select(m => m.Identifier.ValueText).ToList(),
-            Properties = interfaceDecl.Members.OfType<PropertyDeclarationSyntax>().Select(p => p.Identifier.ValueText).ToList(),
-            LineNumber = interfaceDecl.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1
-        };
-    }
-
-    private PropertyInfo CreatePropertyInfo(PropertyDeclarationSyntax property)
-    {
-        var hasGetter = property.AccessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration)) ?? false;
-        var hasSetter = property.AccessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration)) ?? false;
-
-        return new PropertyInfo
-        {
-            Name = property.Identifier.ValueText,
-            Type = property.Type.ToString(),
-            HasGetter = hasGetter,
-            HasSetter = hasSetter,
-            IsAutoImplemented = property.AccessorList?.Accessors.All(a => a.Body == null && a.ExpressionBody == null) ?? false,
-            LineNumber = property.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1
-        };
-    }
-
-    private UsingDirectiveInfo CreateUsingDirectiveInfo(UsingDirectiveSyntax usingDirective)
-    {
-        return new UsingDirectiveInfo
-        {
-            Namespace = usingDirective.Name?.ToString() ?? string.Empty,
-            IsStatic = usingDirective.StaticKeyword.IsKind(SyntaxKind.StaticKeyword),
-            LineNumber = usingDirective.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1
-        };
     }
 
     private Dictionary<string, object> GetPooledDictionary()
@@ -419,18 +300,16 @@ public class CSharpSyntaxAnalyzer : ISyntaxAnalyzer
 
     public bool SupportsFile(string filePath)
     {
-        var extension = Path.GetExtension(filePath).ToLowerInvariant();
-        return extension == ".cs";
+        return Capabilities.SupportsFile(filePath);
     }
 
     public string[] GetSupportedProjectExtensions()
     {
-        return new[] { ".csproj" };
+        return Capabilities.SupportedProjectExtensions;
     }
 
     public bool SupportsProject(string projectPath)
     {
-        var extension = Path.GetExtension(projectPath).ToLowerInvariant();
-        return extension == ".csproj";
+        return Capabilities.SupportsProject(projectPath);
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CSharpAST.Core;
-using CSharpAST.TestGeneration;
 
 namespace CSharpAST.IntegrationTests;
 
@@ -9,7 +8,6 @@ public abstract class TestBase
 {
     protected readonly IServiceProvider _serviceProvider;
     protected readonly ASTGenerator _astGenerator;
-    protected readonly ITestDataGenerator _testDataGenerator;
     protected readonly ILogger _logger;
     protected readonly string _testFilesPath;
     protected readonly string _outputBasePath;
@@ -19,11 +17,9 @@ public abstract class TestBase
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole());
         services.AddTransient<ASTGenerator>();
-        services.AddTransient<ITestDataGenerator, TestDataGenerator>();
         
         _serviceProvider = services.BuildServiceProvider();
         _astGenerator = _serviceProvider.GetRequiredService<ASTGenerator>();
-        _testDataGenerator = _serviceProvider.GetRequiredService<ITestDataGenerator>();
         _logger = _serviceProvider.GetRequiredService<ILogger<TestBase>>();
         
         // Set up paths relative to the solution root

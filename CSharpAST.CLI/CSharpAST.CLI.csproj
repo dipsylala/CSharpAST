@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSharpAST.Core\CSharpAST.Core.csproj" />
-    <ProjectReference Include="..\CSharpAST.TestGeneration\CSharpAST.TestGeneration.csproj" />
   </ItemGroup>
 
 </Project>

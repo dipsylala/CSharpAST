@@ -62,27 +62,35 @@ public static class ProjectFileParser
     {
         var includedFiles = new List<string>();
 
+        // Resolve to absolute path to handle relative paths correctly in different execution contexts
+        var absoluteProjectDir = Path.GetFullPath(projectDir);
+        
+        if (!Directory.Exists(absoluteProjectDir))
+        {
+            return includedFiles;
+        }
+        
         // For SDK-style projects, files are included implicitly
         // Get all files in the project directory that match supported patterns
-        var allFiles = Directory.GetFiles(projectDir, "*", SearchOption.AllDirectories)
+        var allFiles = Directory.GetFiles(absoluteProjectDir, "*", SearchOption.AllDirectories)
             .Where(f => !IsExcludedPath(f))
             .ToList();
 
         // Filter to only files supported by analyzers
         foreach (var file in allFiles)
         {
-            if (analyzers.Any(analyzer => analyzer.SupportsFile(file)))
+            if (analyzers.Any(analyzer => analyzer.Capabilities.SupportsFile(file)))
             {
                 includedFiles.Add(file);
             }
         }
 
         // Remove explicitly excluded files
-        var excludedFiles = GetExplicitlyExcludedFiles(projectXml, projectDir);
+        var excludedFiles = GetExplicitlyExcludedFiles(projectXml, absoluteProjectDir);
         includedFiles = includedFiles.Except(excludedFiles, StringComparer.OrdinalIgnoreCase).ToList();
 
         // Add explicitly included files
-        var explicitlyIncluded = GetExplicitlyIncludedFiles(projectXml, projectDir, analyzers);
+        var explicitlyIncluded = GetExplicitlyIncludedFiles(projectXml, absoluteProjectDir, analyzers);
         includedFiles.AddRange(explicitlyIncluded);
 
         return includedFiles.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
@@ -114,7 +122,7 @@ public static class ProjectFileParser
                 if (!string.IsNullOrEmpty(include))
                 {
                     var fullPath = Path.Combine(projectDir, include);
-                    if (File.Exists(fullPath) && analyzers.Any(analyzer => analyzer.SupportsFile(fullPath)))
+                    if (File.Exists(fullPath) && analyzers.Any(analyzer => analyzer.Capabilities.SupportsFile(fullPath)))
                     {
                         includedFiles.Add(fullPath);
                     }
@@ -175,7 +183,7 @@ public static class ProjectFileParser
                 if (!string.IsNullOrEmpty(include))
                 {
                     var fullPath = Path.Combine(projectDir, include);
-                    if (File.Exists(fullPath) && analyzers.Any(analyzer => analyzer.SupportsFile(fullPath)))
+                    if (File.Exists(fullPath) && analyzers.Any(analyzer => analyzer.Capabilities.SupportsFile(fullPath)))
                     {
                         includedFiles.Add(fullPath);
                     }
@@ -242,6 +250,6 @@ public static class ProjectFileParser
             .Where(f => !IsExcludedPath(f))
             .ToList();
 
-        return allFiles.Where(file => analyzers.Any(analyzer => analyzer.SupportsFile(file))).ToList();
+        return allFiles.Where(file => analyzers.Any(analyzer => analyzer.Capabilities.SupportsFile(file))).ToList();
     }
 }

@@ -116,7 +116,7 @@ class Program
         
         foreach (var maxConcurrency in concurrencyLevels)
         {
-            using var generator = ASTGenerator.CreateOptimized(maxConcurrency: maxConcurrency);
+            using var generator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent, false, maxConcurrency);
             
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             
@@ -174,7 +174,7 @@ class Program
                 
                 var memoryBefore = GC.GetTotalMemory(false);
                 
-                using var generator = ASTGenerator.CreateOptimized(maxConcurrency: threadCount);
+                using var generator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent, false, threadCount);
                 
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 

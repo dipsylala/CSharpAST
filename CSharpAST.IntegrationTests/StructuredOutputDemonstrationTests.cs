@@ -16,7 +16,7 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
 
         // Act - Generate AST with structured output
-        var generator = ASTGenerator.CreateUnified(verbose: true);
+        var generator = new ASTGenerator(verbose: true); // Use concurrent mode (default)
         try
         {
             await generator.GenerateASTAsync(testFilePath, outputDir, "json");
@@ -54,7 +54,7 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
 
         // Act - Generate AST with structured output
-        var generator = ASTGenerator.CreateUnified(verbose: true);
+        var generator = new ASTGenerator(verbose: true);
         try
         {
             await generator.GenerateASTAsync(testFilePath, outputDir, "json");
@@ -83,15 +83,15 @@ public class StructuredOutputDemonstrationTests : TestBase
     [Fact]
     public async Task GenerateStructuredOutput_TestApplication_ShouldCreateOrganizedOutput()
     {
-        // Arrange - Test with a test application directory
-        var applicationPath = Path.Combine(_testFilesPath, "TestApplications", "BasicDLL");
+        // Arrange - Test with a test application project file
+        var applicationPath = Path.Combine(_testFilesPath, "TestApplications", "BasicDLL", "BasicDLL.csproj");
         var outputDir = CreateApplicationOutputPath("BasicDLL", "GenerateStructuredOutput_TestApplication");
         
-        // Assert application directory exists
-        Directory.Exists(applicationPath).Should().BeTrue($"Test application should exist: {applicationPath}");
+        // Assert application project file exists
+        File.Exists(applicationPath).Should().BeTrue($"Test application project should exist: {applicationPath}");
 
-        // Act - Generate AST for all files in the application
-        var generator = ASTGenerator.CreateUnified(verbose: true);
+        // Act - Generate AST for the application project
+        var generator = new ASTGenerator(verbose: true);
         try
         {
             await generator.GenerateASTAsync(applicationPath, outputDir, "json");
@@ -148,7 +148,7 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
 
         // Act - Generate AST with structured output
-        var generator = ASTGenerator.CreateUnified(verbose: true);
+        var generator = new ASTGenerator(verbose: true);
         try
         {
             await generator.GenerateASTAsync(testFilePath, outputDir, "json");
@@ -178,15 +178,15 @@ public class StructuredOutputDemonstrationTests : TestBase
     [Fact]
     public async Task GenerateStructuredOutput_VBApplication_ShouldCreateOrganizedOutput()
     {
-        // Arrange - Test with a VB.NET application directory
-        var applicationPath = Path.Combine(_testFilesPath, "TestApplications", "VBConsoleApp");
+        // Arrange - Test with a VB application project file
+        var applicationPath = Path.Combine(_testFilesPath, "TestApplications", "VBConsoleApp", "VBConsoleApp.vbproj");
         var outputDir = CreateApplicationOutputPath("VBConsoleApp", "GenerateStructuredOutput_VBApplication");
         
-        // Assert application directory exists
-        Directory.Exists(applicationPath).Should().BeTrue($"Test VB application should exist: {applicationPath}");
+        // Assert application project file exists
+        File.Exists(applicationPath).Should().BeTrue($"Test VB application project should exist: {applicationPath}");
 
-        // Act - Generate AST for all files in the VB application
-        var generator = ASTGenerator.CreateUnified(verbose: true);
+        // Act - Generate AST for the VB application project
+        var generator = new ASTGenerator(verbose: true);
         try
         {
             await generator.GenerateASTAsync(applicationPath, outputDir, "json");

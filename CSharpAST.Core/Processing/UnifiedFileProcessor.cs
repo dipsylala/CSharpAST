@@ -31,12 +31,12 @@ namespace CSharpAST.Core.Processing
         {
             var extension = Path.GetExtension(filePath).ToLowerInvariant();
             
-            // Support individual source files via analyzers
-            if (_analyzers.Any(analyzer => analyzer.SupportsFile(filePath)))
+            // Support individual source files via analyzers - check capabilities once
+            if (_analyzers.Any(analyzer => analyzer.Capabilities.SupportsFile(filePath)))
                 return true;
                 
-            // Support project files that any analyzer is responsible for
-            if (_analyzers.Any(analyzer => analyzer.SupportsProject(filePath)))
+            // Support project files that any analyzer is responsible for - check capabilities once
+            if (_analyzers.Any(analyzer => analyzer.Capabilities.SupportsProject(filePath)))
                 return true;
                 
             // Support solution files for aggregation
@@ -45,7 +45,7 @@ namespace CSharpAST.Core.Processing
 
         public bool IsProjectSupported(string projectPath)
         {
-            return _analyzers.Any(analyzer => analyzer.SupportsProject(projectPath));
+            return _analyzers.Any(analyzer => analyzer.Capabilities.SupportsProject(projectPath));
         }
 
         public async Task<List<ASTAnalysis>> ProcessFilesAsync(IEnumerable<string> filePaths)
@@ -73,8 +73,8 @@ namespace CSharpAST.Core.Processing
                     return await ProcessSolutionAsync(filePath);
                 }
                 
-                // Handle project files based on analyzer responsibility
-                if (_analyzers.Any(analyzer => analyzer.SupportsProject(filePath)))
+                // Handle project files based on analyzer responsibility - use capabilities
+                if (_analyzers.Any(analyzer => analyzer.Capabilities.SupportsProject(filePath)))
                 {
                     return await ProcessProjectAsync(filePath);
                 }
@@ -93,8 +93,8 @@ namespace CSharpAST.Core.Processing
         {
             var content = await File.ReadAllTextAsync(filePath);
             
-            // Find the appropriate analyzer for this file type
-            var analyzer = _analyzers.FirstOrDefault(a => a.SupportsFile(filePath));
+            // Find the appropriate analyzer for this file type using capabilities
+            var analyzer = _analyzers.FirstOrDefault(a => a.Capabilities.SupportsFile(filePath));
             
             if (analyzer != null)
             {
@@ -279,17 +279,12 @@ namespace CSharpAST.Core.Processing
 
         private string GetSupportedExtensions()
         {
-            // Dynamically determine supported extensions by testing each analyzer
-            var commonExtensions = new[] { ".cs", ".vb", ".cshtml", ".razor", ".fs", ".tsx", ".ts", ".jsx", ".js" };
-            var supportedExtensions = new List<string>();
-            
-            foreach (var ext in commonExtensions)
-            {
-                if (_analyzers.Any(analyzer => analyzer.SupportsFile($"test{ext}")))
-                {
-                    supportedExtensions.Add(ext);
-                }
-            }
+            // Get all supported extensions from analyzer capabilities
+            var supportedExtensions = _analyzers
+                .SelectMany(analyzer => analyzer.Capabilities.SupportedFileExtensions)
+                .Distinct()
+                .OrderBy(ext => ext)
+                .ToList();
             
             return string.Join(", ", supportedExtensions);
         }
@@ -297,7 +292,7 @@ namespace CSharpAST.Core.Processing
         private List<string> GetProjectFiles(string directoryPath)
         {
             // Find all common project file types
-            var projectExtensions = new[] { "*.csproj", "*.vbproj", "*.fsproj", "*.proj" };
+            var projectExtensions = new[] { "*.csproj", "*.vbproj", "*.proj" };
             var projectFiles = new List<string>();
             
             foreach (var pattern in projectExtensions)

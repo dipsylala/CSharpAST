@@ -6,7 +6,7 @@ using CSharpAST.Core.Processing;
 namespace CSharpAST.Performance;
 
 /// <summary>
-/// Performance benchmarking tool for comparing standard vs. optimized AST generation.
+/// Performance benchmarking tool for c            var analyses = await concurrentGenerator.GenerateFromProjectAsync(projectPath);mparing standard vs. optimized AST generation.
 /// </summary>
 public class ASTPerformanceBenchmark
 {
@@ -84,12 +84,12 @@ public class ASTPerformanceBenchmark
             standardTimes.Add(sw.ElapsedMilliseconds);
         }
 
-        // Optimized implementation
-        using var optimizedGenerator = ASTGenerator.CreateOptimized();
+        // Concurrent implementation
+        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
-            var analysis = await optimizedGenerator.GenerateFromFileAsync(filePath);
+            var analysis = await concurrentGenerator.GenerateFromFileAsync(filePath);
             sw.Stop();
             optimizedTimes.Add(sw.ElapsedMilliseconds);
         }
@@ -143,13 +143,13 @@ public class ASTPerformanceBenchmark
             standardTimes.Add(sw.ElapsedMilliseconds);
         }
 
-        // Optimized implementation (concurrent)
-        using var optimizedGenerator = ASTGenerator.CreateOptimized();
+        // Concurrent implementation
+        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
             var tempDir = Path.GetTempPath();
-            await optimizedGenerator.GenerateASTAsync(Path.GetDirectoryName(filePaths[0]) ?? "", tempDir, "json");
+            await concurrentGenerator.GenerateASTAsync(Path.GetDirectoryName(filePaths[0]) ?? "", tempDir, "json");
             sw.Stop();
             optimizedTimes.Add(sw.ElapsedMilliseconds);
         }
@@ -201,12 +201,12 @@ public class ASTPerformanceBenchmark
             standardTimes.Add(sw.ElapsedMilliseconds);
         }
 
-        // Optimized implementation
-        using var optimizedGenerator = ASTGenerator.CreateOptimized();
+        // Concurrent implementation
+        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
-            var analysis = await optimizedGenerator.GenerateFromProjectAsync(projectPath);
+            var analysis = await concurrentGenerator.GenerateFromProjectAsync(projectPath);
             sw.Stop();
             optimizedTimes.Add(sw.ElapsedMilliseconds);
         }
@@ -241,14 +241,14 @@ public class ASTPerformanceBenchmark
             Console.WriteLine("Warming up JIT...");
 
         var standardGenerator = new ASTGenerator();
-        using var optimizedGenerator = ASTGenerator.CreateOptimized();
+        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
 
         foreach (var file in files)
         {
             try
             {
                 await standardGenerator.GenerateFromFileAsync(file);
-                await optimizedGenerator.GenerateFromFileAsync(file);
+                await concurrentGenerator.GenerateFromFileAsync(file);
             }
             catch
             {

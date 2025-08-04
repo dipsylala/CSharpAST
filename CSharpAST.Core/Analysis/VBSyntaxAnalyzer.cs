@@ -9,6 +9,18 @@ namespace CSharpAST.Core.Analysis;
 /// </summary>
 public class VBSyntaxAnalyzer : ISyntaxAnalyzer
 {
+    /// <summary>
+    /// Gets the capabilities of this VB.NET analyzer
+    /// </summary>
+    public AnalyzerCapabilities Capabilities { get; } = new AnalyzerCapabilities
+    {
+        Name = "VB.NET Syntax Analyzer",
+        Description = "Analyzes VB.NET source code and generates Abstract Syntax Trees using Roslyn",
+        Language = "VB.NET",
+        SupportedFileExtensions = new[] { ".vb" },
+        SupportedProjectExtensions = new[] { ".vbproj" }
+    };
+
     public ASTAnalysis AnalyzeSyntaxTree(SyntaxNode root, string filePath)
     {
         var analysis = new ASTAnalysis
@@ -302,18 +314,16 @@ public class VBSyntaxAnalyzer : ISyntaxAnalyzer
 
     public bool SupportsFile(string filePath)
     {
-        var extension = Path.GetExtension(filePath).ToLowerInvariant();
-        return extension == ".vb";
+        return Capabilities.SupportsFile(filePath);
     }
 
     public string[] GetSupportedProjectExtensions()
     {
-        return new[] { ".vbproj" };
+        return Capabilities.SupportedProjectExtensions;
     }
 
     public bool SupportsProject(string projectPath)
     {
-        var extension = Path.GetExtension(projectPath).ToLowerInvariant();
-        return extension == ".vbproj";
+        return Capabilities.SupportsProject(projectPath);
     }
 }

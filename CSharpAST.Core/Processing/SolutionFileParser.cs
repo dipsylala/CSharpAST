@@ -135,7 +135,7 @@ public static class SolutionFileParser
     private static bool IsProjectFile(string filePath)
     {
         var extension = Path.GetExtension(filePath).ToLowerInvariant();
-        return extension == ".csproj" || extension == ".vbproj" || extension == ".fsproj" || extension == ".vcxproj";
+        return extension == ".csproj" || extension == ".vbproj";
     }
 }
 

@@ -18,7 +18,6 @@ public static class TestServiceProvider
         
         // Add core services
         services.AddTransient<ASTGenerator>();
-        services.AddTransient<ITestDataGenerator, TestDataGenerator>();
         
         return services.BuildServiceProvider();
     }
@@ -82,11 +81,11 @@ public static class ASTTestHelpers
         return new FileAnalysis
         {
             FilePath = astAnalysis.SourceFile,
-            Classes = astAnalysis.Classes,
-            Interfaces = astAnalysis.Interfaces,
-            Methods = astAnalysis.AsyncMethods.Select(m => m.Name).ToList(),
+            Classes = new List<ClassInfo>(), // TODO: Extract from AST if needed
+            Interfaces = new List<InterfaceInfo>(), // TODO: Extract from AST if needed
+            Methods = new List<string>(), // TODO: Extract from AST if needed
             Enums = new List<string>(),
-            Properties = astAnalysis.Properties.Select(p => p.Name).ToList()
+            Properties = new List<string>() // TODO: Extract from AST if needed
         };
     }
 }

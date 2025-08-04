@@ -1,0 +1,2876 @@
+﻿{
+  "SourceFile": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\SDKStyleDLL.csproj",
+  "GeneratedAt": "2025-08-04T01:20:37.2938086Z",
+  "RootNode": {
+    "Type": "ProjectRoot",
+    "Kind": "Project",
+    "Text": "Project: SDKStyleDLL.csproj",
+    "Span": {
+      "Start": 0,
+      "End": 0,
+      "Length": 0
+    },
+    "Location": {
+      "Path": "",
+      "Span": {},
+      "HasMappedPath": false
+    },
+    "Properties": {
+      "ProjectPath": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\SDKStyleDLL.csproj",
+      "FileCount": 2,
+      "ProjectType": ".csproj",
+      "ParsedFromProjectFile": true,
+      "SupportedExtensions": ".cs, .cshtml, .razor"
+    },
+    "Children": [
+      {
+        "Type": "CompilationUnitSyntax",
+        "Kind": "8840",
+        "Text": "namespace SDKStyleDLL;\r\n\r\npublic class Product\r\n{\r\n    public int Id { get; set; }\r\n    public string Name { get; set; } = string.Empty;\r\n    public decimal Price { get; set; }\r\n    \r\n    public string GetDisplayName() => $\"{Name} (${Price:F2})\";\r\n}\r\n",
+        "Span": {
+          "Start": 0,
+          "End": 251,
+          "Length": 251
+        },
+        "Location": {
+          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+          "Span": {
+            "Start": {
+              "Line": 0,
+              "Character": 0
+            },
+            "End": {
+              "Line": 10,
+              "Character": 0
+            }
+          },
+          "HasMappedPath": false
+        },
+        "Properties": {},
+        "Children": [
+          {
+            "Type": "FileScopedNamespaceDeclarationSyntax",
+            "Kind": "8845",
+            "Text": "namespace SDKStyleDLL;\r\n\r\npublic class Product\r\n{\r\n    public int Id { get; set; }\r\n    public string Name { get; set; } = string.Empty;\r\n    public decimal Price { get; set; }\r\n    \r\n    public string GetDisplayName() => $\"{Name} (${Price:F2})\";\r\n}",
+            "Span": {
+              "Start": 0,
+              "End": 249,
+              "Length": 249
+            },
+            "Location": {
+              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+              "Span": {
+                "Start": {
+                  "Line": 0,
+                  "Character": 0
+                },
+                "End": {
+                  "Line": 9,
+                  "Character": 1
+                }
+              },
+              "HasMappedPath": false
+            },
+            "Properties": {},
+            "Children": [
+              {
+                "Type": "IdentifierNameSyntax",
+                "Kind": "8616",
+                "Text": "SDKStyleDLL",
+                "Span": {
+                  "Start": 10,
+                  "End": 21,
+                  "Length": 11
+                },
+                "Location": {
+                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                  "Span": {
+                    "Start": {
+                      "Line": 0,
+                      "Character": 10
+                    },
+                    "End": {
+                      "Line": 0,
+                      "Character": 21
+                    }
+                  },
+                  "HasMappedPath": false
+                },
+                "Properties": {},
+                "Children": []
+              },
+              {
+                "Type": "ClassDeclarationSyntax",
+                "Kind": "8855",
+                "Text": "public class Product\r\n{\r\n    public int Id { get; set; }\r\n    public string Name { get; set; } = string.Empty;\r\n    public decimal Price { get; set; }\r\n    \r\n    public string GetDisplayName() => $\"{Name} (${Price:F2})\";\r\n}",
+                "Span": {
+                  "Start": 26,
+                  "End": 249,
+                  "Length": 223
+                },
+                "Location": {
+                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                  "Span": {
+                    "Start": {
+                      "Line": 2,
+                      "Character": 0
+                    },
+                    "End": {
+                      "Line": 9,
+                      "Character": 1
+                    }
+                  },
+                  "HasMappedPath": false
+                },
+                "Properties": {
+                  "ClassName": "Product",
+                  "Modifiers": [
+                    "public"
+                  ]
+                },
+                "Children": [
+                  {
+                    "Type": "PropertyDeclarationSyntax",
+                    "Kind": "8892",
+                    "Text": "public int Id { get; set; }",
+                    "Span": {
+                      "Start": 55,
+                      "End": 82,
+                      "Length": 27
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 4,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 4,
+                          "Character": 31
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "PropertyName": "Id",
+                      "PropertyType": "int",
+                      "HasGetter": true,
+                      "HasSetter": true
+                    },
+                    "Children": [
+                      {
+                        "Type": "PredefinedTypeSyntax",
+                        "Kind": "8621",
+                        "Text": "int",
+                        "Span": {
+                          "Start": 62,
+                          "End": 65,
+                          "Length": 3
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 4,
+                              "Character": 11
+                            },
+                            "End": {
+                              "Line": 4,
+                              "Character": 14
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "AccessorListSyntax",
+                        "Kind": "8895",
+                        "Text": "{ get; set; }",
+                        "Span": {
+                          "Start": 69,
+                          "End": 82,
+                          "Length": 13
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 4,
+                              "Character": 18
+                            },
+                            "End": {
+                              "Line": 4,
+                              "Character": 31
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "AccessorDeclarationSyntax",
+                            "Kind": "8896",
+                            "Text": "get;",
+                            "Span": {
+                              "Start": 71,
+                              "End": 75,
+                              "Length": 4
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 4,
+                                  "Character": 20
+                                },
+                                "End": {
+                                  "Line": 4,
+                                  "Character": 24
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": []
+                          },
+                          {
+                            "Type": "AccessorDeclarationSyntax",
+                            "Kind": "8897",
+                            "Text": "set;",
+                            "Span": {
+                              "Start": 76,
+                              "End": 80,
+                              "Length": 4
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 4,
+                                  "Character": 25
+                                },
+                                "End": {
+                                  "Line": 4,
+                                  "Character": 29
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Type": "PropertyDeclarationSyntax",
+                    "Kind": "8892",
+                    "Text": "public string Name { get; set; } = string.Empty;",
+                    "Span": {
+                      "Start": 88,
+                      "End": 136,
+                      "Length": 48
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 5,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 5,
+                          "Character": 52
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "PropertyName": "Name",
+                      "PropertyType": "string",
+                      "HasGetter": true,
+                      "HasSetter": true
+                    },
+                    "Children": [
+                      {
+                        "Type": "PredefinedTypeSyntax",
+                        "Kind": "8621",
+                        "Text": "string",
+                        "Span": {
+                          "Start": 95,
+                          "End": 101,
+                          "Length": 6
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 5,
+                              "Character": 11
+                            },
+                            "End": {
+                              "Line": 5,
+                              "Character": 17
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "AccessorListSyntax",
+                        "Kind": "8895",
+                        "Text": "{ get; set; }",
+                        "Span": {
+                          "Start": 107,
+                          "End": 120,
+                          "Length": 13
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 5,
+                              "Character": 23
+                            },
+                            "End": {
+                              "Line": 5,
+                              "Character": 36
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "AccessorDeclarationSyntax",
+                            "Kind": "8896",
+                            "Text": "get;",
+                            "Span": {
+                              "Start": 109,
+                              "End": 113,
+                              "Length": 4
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 5,
+                                  "Character": 25
+                                },
+                                "End": {
+                                  "Line": 5,
+                                  "Character": 29
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": []
+                          },
+                          {
+                            "Type": "AccessorDeclarationSyntax",
+                            "Kind": "8897",
+                            "Text": "set;",
+                            "Span": {
+                              "Start": 114,
+                              "End": 118,
+                              "Length": 4
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 5,
+                                  "Character": 30
+                                },
+                                "End": {
+                                  "Line": 5,
+                                  "Character": 34
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": []
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "EqualsValueClauseSyntax",
+                        "Kind": "8796",
+                        "Text": "= string.Empty",
+                        "Span": {
+                          "Start": 121,
+                          "End": 135,
+                          "Length": 14
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 5,
+                              "Character": 37
+                            },
+                            "End": {
+                              "Line": 5,
+                              "Character": 51
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "MemberAccessExpressionSyntax",
+                            "Kind": "8689",
+                            "Text": "string.Empty",
+                            "Span": {
+                              "Start": 123,
+                              "End": 135,
+                              "Length": 12
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 5,
+                                  "Character": 39
+                                },
+                                "End": {
+                                  "Line": 5,
+                                  "Character": 51
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "PredefinedTypeSyntax",
+                                "Kind": "8621",
+                                "Text": "string",
+                                "Span": {
+                                  "Start": 123,
+                                  "End": 129,
+                                  "Length": 6
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 5,
+                                      "Character": 39
+                                    },
+                                    "End": {
+                                      "Line": 5,
+                                      "Character": 45
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              },
+                              {
+                                "Type": "IdentifierNameSyntax",
+                                "Kind": "8616",
+                                "Text": "Empty",
+                                "Span": {
+                                  "Start": 130,
+                                  "End": 135,
+                                  "Length": 5
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 5,
+                                      "Character": 46
+                                    },
+                                    "End": {
+                                      "Line": 5,
+                                      "Character": 51
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Type": "PropertyDeclarationSyntax",
+                    "Kind": "8892",
+                    "Text": "public decimal Price { get; set; }",
+                    "Span": {
+                      "Start": 142,
+                      "End": 176,
+                      "Length": 34
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 6,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 6,
+                          "Character": 38
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "PropertyName": "Price",
+                      "PropertyType": "decimal",
+                      "HasGetter": true,
+                      "HasSetter": true
+                    },
+                    "Children": [
+                      {
+                        "Type": "PredefinedTypeSyntax",
+                        "Kind": "8621",
+                        "Text": "decimal",
+                        "Span": {
+                          "Start": 149,
+                          "End": 156,
+                          "Length": 7
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 6,
+                              "Character": 11
+                            },
+                            "End": {
+                              "Line": 6,
+                              "Character": 18
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "AccessorListSyntax",
+                        "Kind": "8895",
+                        "Text": "{ get; set; }",
+                        "Span": {
+                          "Start": 163,
+                          "End": 176,
+                          "Length": 13
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 6,
+                              "Character": 25
+                            },
+                            "End": {
+                              "Line": 6,
+                              "Character": 38
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "AccessorDeclarationSyntax",
+                            "Kind": "8896",
+                            "Text": "get;",
+                            "Span": {
+                              "Start": 165,
+                              "End": 169,
+                              "Length": 4
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 6,
+                                  "Character": 27
+                                },
+                                "End": {
+                                  "Line": 6,
+                                  "Character": 31
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": []
+                          },
+                          {
+                            "Type": "AccessorDeclarationSyntax",
+                            "Kind": "8897",
+                            "Text": "set;",
+                            "Span": {
+                              "Start": 170,
+                              "End": 174,
+                              "Length": 4
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 6,
+                                  "Character": 32
+                                },
+                                "End": {
+                                  "Line": 6,
+                                  "Character": 36
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Type": "MethodDeclarationSyntax",
+                    "Kind": "8875",
+                    "Text": "public string GetDisplayName() => $\"{Name} (${Price:F2})\";",
+                    "Span": {
+                      "Start": 188,
+                      "End": 246,
+                      "Length": 58
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 8,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 8,
+                          "Character": 62
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "MethodName": "GetDisplayName",
+                      "IsAsync": false,
+                      "ReturnType": "string",
+                      "Modifiers": [
+                        "public"
+                      ]
+                    },
+                    "Children": [
+                      {
+                        "Type": "PredefinedTypeSyntax",
+                        "Kind": "8621",
+                        "Text": "string",
+                        "Span": {
+                          "Start": 195,
+                          "End": 201,
+                          "Length": 6
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 8,
+                              "Character": 11
+                            },
+                            "End": {
+                              "Line": 8,
+                              "Character": 17
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "ParameterListSyntax",
+                        "Kind": "8906",
+                        "Text": "()",
+                        "Span": {
+                          "Start": 216,
+                          "End": 218,
+                          "Length": 2
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 8,
+                              "Character": 32
+                            },
+                            "End": {
+                              "Line": 8,
+                              "Character": 34
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "ArrowExpressionClauseSyntax",
+                        "Kind": "8917",
+                        "Text": "=> $\"{Name} (${Price:F2})\"",
+                        "Span": {
+                          "Start": 219,
+                          "End": 245,
+                          "Length": 26
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 8,
+                              "Character": 35
+                            },
+                            "End": {
+                              "Line": 8,
+                              "Character": 61
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "InterpolatedStringExpressionSyntax",
+                            "Kind": "8655",
+                            "Text": "$\"{Name} (${Price:F2})\"",
+                            "Span": {
+                              "Start": 222,
+                              "End": 245,
+                              "Length": 23
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 8,
+                                  "Character": 38
+                                },
+                                "End": {
+                                  "Line": 8,
+                                  "Character": 61
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "InterpolationSyntax",
+                                "Kind": "8918",
+                                "Text": "{Name}",
+                                "Span": {
+                                  "Start": 224,
+                                  "End": 230,
+                                  "Length": 6
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 8,
+                                      "Character": 40
+                                    },
+                                    "End": {
+                                      "Line": 8,
+                                      "Character": 46
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "IdentifierNameSyntax",
+                                    "Kind": "8616",
+                                    "Text": "Name",
+                                    "Span": {
+                                      "Start": 225,
+                                      "End": 229,
+                                      "Length": 4
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 8,
+                                          "Character": 41
+                                        },
+                                        "End": {
+                                          "Line": 8,
+                                          "Character": 45
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "Type": "InterpolatedStringTextSyntax",
+                                "Kind": "8919",
+                                "Text": " ($",
+                                "Span": {
+                                  "Start": 230,
+                                  "End": 233,
+                                  "Length": 3
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 8,
+                                      "Character": 46
+                                    },
+                                    "End": {
+                                      "Line": 8,
+                                      "Character": 49
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              },
+                              {
+                                "Type": "InterpolationSyntax",
+                                "Kind": "8918",
+                                "Text": "{Price:F2}",
+                                "Span": {
+                                  "Start": 233,
+                                  "End": 243,
+                                  "Length": 10
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 8,
+                                      "Character": 49
+                                    },
+                                    "End": {
+                                      "Line": 8,
+                                      "Character": 59
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "IdentifierNameSyntax",
+                                    "Kind": "8616",
+                                    "Text": "Price",
+                                    "Span": {
+                                      "Start": 234,
+                                      "End": 239,
+                                      "Length": 5
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 8,
+                                          "Character": 50
+                                        },
+                                        "End": {
+                                          "Line": 8,
+                                          "Character": 55
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  },
+                                  {
+                                    "Type": "InterpolationFormatClauseSyntax",
+                                    "Kind": "8921",
+                                    "Text": ":F2",
+                                    "Span": {
+                                      "Start": 239,
+                                      "End": 242,
+                                      "Length": 3
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 8,
+                                          "Character": 55
+                                        },
+                                        "End": {
+                                          "Line": 8,
+                                          "Character": 58
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "Type": "InterpolatedStringTextSyntax",
+                                "Kind": "8919",
+                                "Text": ")",
+                                "Span": {
+                                  "Start": 243,
+                                  "End": 244,
+                                  "Length": 1
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\Product.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 8,
+                                      "Character": 59
+                                    },
+                                    "End": {
+                                      "Line": 8,
+                                      "Character": 60
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Type": "CompilationUnitSyntax",
+        "Kind": "8840",
+        "Text": "namespace SDKStyleDLL;\r\n\r\npublic class ProductService\r\n{\r\n    private readonly List<Product> _products = new();\r\n\r\n    public void AddProduct(Product product)\r\n    {\r\n        _products.Add(product);\r\n    }\r\n\r\n    public async Task<Product?> GetProductAsync(int id)\r\n    {\r\n        await Task.Delay(10); // Simulate async operation\r\n        return _products.FirstOrDefault(p => p.Id == id);\r\n    }\r\n\r\n    public IEnumerable<Product> GetAllProducts() => _products.AsReadOnly();\r\n}\r\n",
+        "Span": {
+          "Start": 0,
+          "End": 480,
+          "Length": 480
+        },
+        "Location": {
+          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+          "Span": {
+            "Start": {
+              "Line": 0,
+              "Character": 0
+            },
+            "End": {
+              "Line": 19,
+              "Character": 0
+            }
+          },
+          "HasMappedPath": false
+        },
+        "Properties": {},
+        "Children": [
+          {
+            "Type": "FileScopedNamespaceDeclarationSyntax",
+            "Kind": "8845",
+            "Text": "namespace SDKStyleDLL;\r\n\r\npublic class ProductService\r\n{\r\n    private readonly List<Product> _products = new();\r\n\r\n    public void AddProduct(Product product)\r\n    {\r\n        _products.Add(product);\r\n    }\r\n\r\n    public async Task<Product?> GetProductAsync(int id)\r\n    {\r\n        await Task.Delay(10); // Simulate async operation\r\n        return _products.FirstOrDefault(p => p.Id == id);\r\n    }\r\n\r\n    public IEnumerable<Product> GetAllProducts() => _products.AsReadOnly();\r\n}",
+            "Span": {
+              "Start": 0,
+              "End": 478,
+              "Length": 478
+            },
+            "Location": {
+              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+              "Span": {
+                "Start": {
+                  "Line": 0,
+                  "Character": 0
+                },
+                "End": {
+                  "Line": 18,
+                  "Character": 1
+                }
+              },
+              "HasMappedPath": false
+            },
+            "Properties": {},
+            "Children": [
+              {
+                "Type": "IdentifierNameSyntax",
+                "Kind": "8616",
+                "Text": "SDKStyleDLL",
+                "Span": {
+                  "Start": 10,
+                  "End": 21,
+                  "Length": 11
+                },
+                "Location": {
+                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                  "Span": {
+                    "Start": {
+                      "Line": 0,
+                      "Character": 10
+                    },
+                    "End": {
+                      "Line": 0,
+                      "Character": 21
+                    }
+                  },
+                  "HasMappedPath": false
+                },
+                "Properties": {},
+                "Children": []
+              },
+              {
+                "Type": "ClassDeclarationSyntax",
+                "Kind": "8855",
+                "Text": "public class ProductService\r\n{\r\n    private readonly List<Product> _products = new();\r\n\r\n    public void AddProduct(Product product)\r\n    {\r\n        _products.Add(product);\r\n    }\r\n\r\n    public async Task<Product?> GetProductAsync(int id)\r\n    {\r\n        await Task.Delay(10); // Simulate async operation\r\n        return _products.FirstOrDefault(p => p.Id == id);\r\n    }\r\n\r\n    public IEnumerable<Product> GetAllProducts() => _products.AsReadOnly();\r\n}",
+                "Span": {
+                  "Start": 26,
+                  "End": 478,
+                  "Length": 452
+                },
+                "Location": {
+                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                  "Span": {
+                    "Start": {
+                      "Line": 2,
+                      "Character": 0
+                    },
+                    "End": {
+                      "Line": 18,
+                      "Character": 1
+                    }
+                  },
+                  "HasMappedPath": false
+                },
+                "Properties": {
+                  "ClassName": "ProductService",
+                  "Modifiers": [
+                    "public"
+                  ]
+                },
+                "Children": [
+                  {
+                    "Type": "FieldDeclarationSyntax",
+                    "Kind": "8873",
+                    "Text": "private readonly List<Product> _products = new();",
+                    "Span": {
+                      "Start": 62,
+                      "End": 111,
+                      "Length": 49
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 4,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 4,
+                          "Character": 53
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {},
+                    "Children": [
+                      {
+                        "Type": "VariableDeclarationSyntax",
+                        "Kind": "8794",
+                        "Text": "List<Product> _products = new()",
+                        "Span": {
+                          "Start": 79,
+                          "End": 110,
+                          "Length": 31
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 4,
+                              "Character": 21
+                            },
+                            "End": {
+                              "Line": 4,
+                              "Character": 52
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "GenericNameSyntax",
+                            "Kind": "8618",
+                            "Text": "List<Product>",
+                            "Span": {
+                              "Start": 79,
+                              "End": 92,
+                              "Length": 13
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 4,
+                                  "Character": 21
+                                },
+                                "End": {
+                                  "Line": 4,
+                                  "Character": 34
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "TypeArgumentListSyntax",
+                                "Kind": "8619",
+                                "Text": "<Product>",
+                                "Span": {
+                                  "Start": 83,
+                                  "End": 92,
+                                  "Length": 9
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 4,
+                                      "Character": 25
+                                    },
+                                    "End": {
+                                      "Line": 4,
+                                      "Character": 34
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "IdentifierNameSyntax",
+                                    "Kind": "8616",
+                                    "Text": "Product",
+                                    "Span": {
+                                      "Start": 84,
+                                      "End": 91,
+                                      "Length": 7
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 4,
+                                          "Character": 26
+                                        },
+                                        "End": {
+                                          "Line": 4,
+                                          "Character": 33
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Type": "VariableDeclaratorSyntax",
+                            "Kind": "8795",
+                            "Text": "_products = new()",
+                            "Span": {
+                              "Start": 93,
+                              "End": 110,
+                              "Length": 17
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 4,
+                                  "Character": 35
+                                },
+                                "End": {
+                                  "Line": 4,
+                                  "Character": 52
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {
+                              "VariableName": "_products"
+                            },
+                            "Children": [
+                              {
+                                "Type": "EqualsValueClauseSyntax",
+                                "Kind": "8796",
+                                "Text": "= new()",
+                                "Span": {
+                                  "Start": 103,
+                                  "End": 110,
+                                  "Length": 7
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 4,
+                                      "Character": 45
+                                    },
+                                    "End": {
+                                      "Line": 4,
+                                      "Character": 52
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "ImplicitObjectCreationExpressionSyntax",
+                                    "Kind": "8659",
+                                    "Text": "new()",
+                                    "Span": {
+                                      "Start": 105,
+                                      "End": 110,
+                                      "Length": 5
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 4,
+                                          "Character": 47
+                                        },
+                                        "End": {
+                                          "Line": 4,
+                                          "Character": 52
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": [
+                                      {
+                                        "Type": "ArgumentListSyntax",
+                                        "Kind": "8636",
+                                        "Text": "()",
+                                        "Span": {
+                                          "Start": 108,
+                                          "End": 110,
+                                          "Length": 2
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 4,
+                                              "Character": 50
+                                            },
+                                            "End": {
+                                              "Line": 4,
+                                              "Character": 52
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Type": "MethodDeclarationSyntax",
+                    "Kind": "8875",
+                    "Text": "public void AddProduct(Product product)\r\n    {\r\n        _products.Add(product);\r\n    }",
+                    "Span": {
+                      "Start": 119,
+                      "End": 205,
+                      "Length": 86
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 6,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 9,
+                          "Character": 5
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "MethodName": "AddProduct",
+                      "IsAsync": false,
+                      "ReturnType": "void",
+                      "Modifiers": [
+                        "public"
+                      ]
+                    },
+                    "Children": [
+                      {
+                        "Type": "PredefinedTypeSyntax",
+                        "Kind": "8621",
+                        "Text": "void",
+                        "Span": {
+                          "Start": 126,
+                          "End": 130,
+                          "Length": 4
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 6,
+                              "Character": 11
+                            },
+                            "End": {
+                              "Line": 6,
+                              "Character": 15
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "ParameterListSyntax",
+                        "Kind": "8906",
+                        "Text": "(Product product)",
+                        "Span": {
+                          "Start": 141,
+                          "End": 158,
+                          "Length": 17
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 6,
+                              "Character": 26
+                            },
+                            "End": {
+                              "Line": 6,
+                              "Character": 43
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "ParameterSyntax",
+                            "Kind": "8908",
+                            "Text": "Product product",
+                            "Span": {
+                              "Start": 142,
+                              "End": 157,
+                              "Length": 15
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 6,
+                                  "Character": 27
+                                },
+                                "End": {
+                                  "Line": 6,
+                                  "Character": 42
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "IdentifierNameSyntax",
+                                "Kind": "8616",
+                                "Text": "Product",
+                                "Span": {
+                                  "Start": 142,
+                                  "End": 149,
+                                  "Length": 7
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 6,
+                                      "Character": 27
+                                    },
+                                    "End": {
+                                      "Line": 6,
+                                      "Character": 34
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "BlockSyntax",
+                        "Kind": "8792",
+                        "Text": "{\r\n        _products.Add(product);\r\n    }",
+                        "Span": {
+                          "Start": 164,
+                          "End": 205,
+                          "Length": 41
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 7,
+                              "Character": 4
+                            },
+                            "End": {
+                              "Line": 9,
+                              "Character": 5
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "ExpressionStatementSyntax",
+                            "Kind": "8797",
+                            "Text": "_products.Add(product);",
+                            "Span": {
+                              "Start": 175,
+                              "End": 198,
+                              "Length": 23
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 8,
+                                  "Character": 8
+                                },
+                                "End": {
+                                  "Line": 8,
+                                  "Character": 31
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "InvocationExpressionSyntax",
+                                "Kind": "8634",
+                                "Text": "_products.Add(product)",
+                                "Span": {
+                                  "Start": 175,
+                                  "End": 197,
+                                  "Length": 22
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 8,
+                                      "Character": 8
+                                    },
+                                    "End": {
+                                      "Line": 8,
+                                      "Character": 30
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "MemberAccessExpressionSyntax",
+                                    "Kind": "8689",
+                                    "Text": "_products.Add",
+                                    "Span": {
+                                      "Start": 175,
+                                      "End": 188,
+                                      "Length": 13
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 8,
+                                          "Character": 8
+                                        },
+                                        "End": {
+                                          "Line": 8,
+                                          "Character": 21
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": [
+                                      {
+                                        "Type": "IdentifierNameSyntax",
+                                        "Kind": "8616",
+                                        "Text": "_products",
+                                        "Span": {
+                                          "Start": 175,
+                                          "End": 184,
+                                          "Length": 9
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 8,
+                                              "Character": 8
+                                            },
+                                            "End": {
+                                              "Line": 8,
+                                              "Character": 17
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": []
+                                      },
+                                      {
+                                        "Type": "IdentifierNameSyntax",
+                                        "Kind": "8616",
+                                        "Text": "Add",
+                                        "Span": {
+                                          "Start": 185,
+                                          "End": 188,
+                                          "Length": 3
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 8,
+                                              "Character": 18
+                                            },
+                                            "End": {
+                                              "Line": 8,
+                                              "Character": 21
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Type": "ArgumentListSyntax",
+                                    "Kind": "8636",
+                                    "Text": "(product)",
+                                    "Span": {
+                                      "Start": 188,
+                                      "End": 197,
+                                      "Length": 9
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 8,
+                                          "Character": 21
+                                        },
+                                        "End": {
+                                          "Line": 8,
+                                          "Character": 30
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": [
+                                      {
+                                        "Type": "ArgumentSyntax",
+                                        "Kind": "8638",
+                                        "Text": "product",
+                                        "Span": {
+                                          "Start": 189,
+                                          "End": 196,
+                                          "Length": 7
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 8,
+                                              "Character": 22
+                                            },
+                                            "End": {
+                                              "Line": 8,
+                                              "Character": 29
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": [
+                                          {
+                                            "Type": "IdentifierNameSyntax",
+                                            "Kind": "8616",
+                                            "Text": "product",
+                                            "Span": {
+                                              "Start": 189,
+                                              "End": 196,
+                                              "Length": 7
+                                            },
+                                            "Location": {
+                                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                              "Span": {
+                                                "Start": {
+                                                  "Line": 8,
+                                                  "Character": 22
+                                                },
+                                                "End": {
+                                                  "Line": 8,
+                                                  "Character": 29
+                                                }
+                                              },
+                                              "HasMappedPath": false
+                                            },
+                                            "Properties": {},
+                                            "Children": []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Type": "MethodDeclarationSyntax",
+                    "Kind": "8875",
+                    "Text": "public async Task<Product?> GetProductAsync(int id)\r\n    {\r\n        await Task.Delay(10); // Simulate async operation\r\n        return _products.FirstOrDefault(p => p.Id == id);\r\n    }",
+                    "Span": {
+                      "Start": 213,
+                      "End": 396,
+                      "Length": 183
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 11,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 15,
+                          "Character": 5
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "MethodName": "GetProductAsync",
+                      "IsAsync": true,
+                      "ReturnType": "Task<Product?>",
+                      "Modifiers": [
+                        "public",
+                        "async"
+                      ]
+                    },
+                    "Children": [
+                      {
+                        "Type": "GenericNameSyntax",
+                        "Kind": "8618",
+                        "Text": "Task<Product?>",
+                        "Span": {
+                          "Start": 226,
+                          "End": 240,
+                          "Length": 14
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 11,
+                              "Character": 17
+                            },
+                            "End": {
+                              "Line": 11,
+                              "Character": 31
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "TypeArgumentListSyntax",
+                            "Kind": "8619",
+                            "Text": "<Product?>",
+                            "Span": {
+                              "Start": 230,
+                              "End": 240,
+                              "Length": 10
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 11,
+                                  "Character": 21
+                                },
+                                "End": {
+                                  "Line": 11,
+                                  "Character": 31
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "NullableTypeSyntax",
+                                "Kind": "8625",
+                                "Text": "Product?",
+                                "Span": {
+                                  "Start": 231,
+                                  "End": 239,
+                                  "Length": 8
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 11,
+                                      "Character": 22
+                                    },
+                                    "End": {
+                                      "Line": 11,
+                                      "Character": 30
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "IdentifierNameSyntax",
+                                    "Kind": "8616",
+                                    "Text": "Product",
+                                    "Span": {
+                                      "Start": 231,
+                                      "End": 238,
+                                      "Length": 7
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 11,
+                                          "Character": 22
+                                        },
+                                        "End": {
+                                          "Line": 11,
+                                          "Character": 29
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "ParameterListSyntax",
+                        "Kind": "8906",
+                        "Text": "(int id)",
+                        "Span": {
+                          "Start": 256,
+                          "End": 264,
+                          "Length": 8
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 11,
+                              "Character": 47
+                            },
+                            "End": {
+                              "Line": 11,
+                              "Character": 55
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "ParameterSyntax",
+                            "Kind": "8908",
+                            "Text": "int id",
+                            "Span": {
+                              "Start": 257,
+                              "End": 263,
+                              "Length": 6
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 11,
+                                  "Character": 48
+                                },
+                                "End": {
+                                  "Line": 11,
+                                  "Character": 54
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "PredefinedTypeSyntax",
+                                "Kind": "8621",
+                                "Text": "int",
+                                "Span": {
+                                  "Start": 257,
+                                  "End": 260,
+                                  "Length": 3
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 11,
+                                      "Character": 48
+                                    },
+                                    "End": {
+                                      "Line": 11,
+                                      "Character": 51
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "BlockSyntax",
+                        "Kind": "8792",
+                        "Text": "{\r\n        await Task.Delay(10); // Simulate async operation\r\n        return _products.FirstOrDefault(p => p.Id == id);\r\n    }",
+                        "Span": {
+                          "Start": 270,
+                          "End": 396,
+                          "Length": 126
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 12,
+                              "Character": 4
+                            },
+                            "End": {
+                              "Line": 15,
+                              "Character": 5
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "ExpressionStatementSyntax",
+                            "Kind": "8797",
+                            "Text": "await Task.Delay(10);",
+                            "Span": {
+                              "Start": 281,
+                              "End": 302,
+                              "Length": 21
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 13,
+                                  "Character": 8
+                                },
+                                "End": {
+                                  "Line": 13,
+                                  "Character": 29
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "AwaitExpressionSyntax",
+                                "Kind": "8740",
+                                "Text": "await Task.Delay(10)",
+                                "Span": {
+                                  "Start": 281,
+                                  "End": 301,
+                                  "Length": 20
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 13,
+                                      "Character": 8
+                                    },
+                                    "End": {
+                                      "Line": 13,
+                                      "Character": 28
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "InvocationExpressionSyntax",
+                                    "Kind": "8634",
+                                    "Text": "Task.Delay(10)",
+                                    "Span": {
+                                      "Start": 287,
+                                      "End": 301,
+                                      "Length": 14
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 13,
+                                          "Character": 14
+                                        },
+                                        "End": {
+                                          "Line": 13,
+                                          "Character": 28
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": [
+                                      {
+                                        "Type": "MemberAccessExpressionSyntax",
+                                        "Kind": "8689",
+                                        "Text": "Task.Delay",
+                                        "Span": {
+                                          "Start": 287,
+                                          "End": 297,
+                                          "Length": 10
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 13,
+                                              "Character": 14
+                                            },
+                                            "End": {
+                                              "Line": 13,
+                                              "Character": 24
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": [
+                                          {
+                                            "Type": "IdentifierNameSyntax",
+                                            "Kind": "8616",
+                                            "Text": "Task",
+                                            "Span": {
+                                              "Start": 287,
+                                              "End": 291,
+                                              "Length": 4
+                                            },
+                                            "Location": {
+                                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                              "Span": {
+                                                "Start": {
+                                                  "Line": 13,
+                                                  "Character": 14
+                                                },
+                                                "End": {
+                                                  "Line": 13,
+                                                  "Character": 18
+                                                }
+                                              },
+                                              "HasMappedPath": false
+                                            },
+                                            "Properties": {},
+                                            "Children": []
+                                          },
+                                          {
+                                            "Type": "IdentifierNameSyntax",
+                                            "Kind": "8616",
+                                            "Text": "Delay",
+                                            "Span": {
+                                              "Start": 292,
+                                              "End": 297,
+                                              "Length": 5
+                                            },
+                                            "Location": {
+                                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                              "Span": {
+                                                "Start": {
+                                                  "Line": 13,
+                                                  "Character": 19
+                                                },
+                                                "End": {
+                                                  "Line": 13,
+                                                  "Character": 24
+                                                }
+                                              },
+                                              "HasMappedPath": false
+                                            },
+                                            "Properties": {},
+                                            "Children": []
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Type": "ArgumentListSyntax",
+                                        "Kind": "8636",
+                                        "Text": "(10)",
+                                        "Span": {
+                                          "Start": 297,
+                                          "End": 301,
+                                          "Length": 4
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 13,
+                                              "Character": 24
+                                            },
+                                            "End": {
+                                              "Line": 13,
+                                              "Character": 28
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": [
+                                          {
+                                            "Type": "ArgumentSyntax",
+                                            "Kind": "8638",
+                                            "Text": "10",
+                                            "Span": {
+                                              "Start": 298,
+                                              "End": 300,
+                                              "Length": 2
+                                            },
+                                            "Location": {
+                                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                              "Span": {
+                                                "Start": {
+                                                  "Line": 13,
+                                                  "Character": 25
+                                                },
+                                                "End": {
+                                                  "Line": 13,
+                                                  "Character": 27
+                                                }
+                                              },
+                                              "HasMappedPath": false
+                                            },
+                                            "Properties": {},
+                                            "Children": [
+                                              {
+                                                "Type": "LiteralExpressionSyntax",
+                                                "Kind": "8749",
+                                                "Text": "10",
+                                                "Span": {
+                                                  "Start": 298,
+                                                  "End": 300,
+                                                  "Length": 2
+                                                },
+                                                "Location": {
+                                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                  "Span": {
+                                                    "Start": {
+                                                      "Line": 13,
+                                                      "Character": 25
+                                                    },
+                                                    "End": {
+                                                      "Line": 13,
+                                                      "Character": 27
+                                                    }
+                                                  },
+                                                  "HasMappedPath": false
+                                                },
+                                                "Properties": {},
+                                                "Children": []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Type": "ReturnStatementSyntax",
+                            "Kind": "8805",
+                            "Text": "return _products.FirstOrDefault(p => p.Id == id);",
+                            "Span": {
+                              "Start": 340,
+                              "End": 389,
+                              "Length": 49
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 14,
+                                  "Character": 8
+                                },
+                                "End": {
+                                  "Line": 14,
+                                  "Character": 57
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "InvocationExpressionSyntax",
+                                "Kind": "8634",
+                                "Text": "_products.FirstOrDefault(p => p.Id == id)",
+                                "Span": {
+                                  "Start": 347,
+                                  "End": 388,
+                                  "Length": 41
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 14,
+                                      "Character": 15
+                                    },
+                                    "End": {
+                                      "Line": 14,
+                                      "Character": 56
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "MemberAccessExpressionSyntax",
+                                    "Kind": "8689",
+                                    "Text": "_products.FirstOrDefault",
+                                    "Span": {
+                                      "Start": 347,
+                                      "End": 371,
+                                      "Length": 24
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 14,
+                                          "Character": 15
+                                        },
+                                        "End": {
+                                          "Line": 14,
+                                          "Character": 39
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": [
+                                      {
+                                        "Type": "IdentifierNameSyntax",
+                                        "Kind": "8616",
+                                        "Text": "_products",
+                                        "Span": {
+                                          "Start": 347,
+                                          "End": 356,
+                                          "Length": 9
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 14,
+                                              "Character": 15
+                                            },
+                                            "End": {
+                                              "Line": 14,
+                                              "Character": 24
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": []
+                                      },
+                                      {
+                                        "Type": "IdentifierNameSyntax",
+                                        "Kind": "8616",
+                                        "Text": "FirstOrDefault",
+                                        "Span": {
+                                          "Start": 357,
+                                          "End": 371,
+                                          "Length": 14
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 14,
+                                              "Character": 25
+                                            },
+                                            "End": {
+                                              "Line": 14,
+                                              "Character": 39
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": []
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "Type": "ArgumentListSyntax",
+                                    "Kind": "8636",
+                                    "Text": "(p => p.Id == id)",
+                                    "Span": {
+                                      "Start": 371,
+                                      "End": 388,
+                                      "Length": 17
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 14,
+                                          "Character": 39
+                                        },
+                                        "End": {
+                                          "Line": 14,
+                                          "Character": 56
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": [
+                                      {
+                                        "Type": "ArgumentSyntax",
+                                        "Kind": "8638",
+                                        "Text": "p => p.Id == id",
+                                        "Span": {
+                                          "Start": 372,
+                                          "End": 387,
+                                          "Length": 15
+                                        },
+                                        "Location": {
+                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                          "Span": {
+                                            "Start": {
+                                              "Line": 14,
+                                              "Character": 40
+                                            },
+                                            "End": {
+                                              "Line": 14,
+                                              "Character": 55
+                                            }
+                                          },
+                                          "HasMappedPath": false
+                                        },
+                                        "Properties": {},
+                                        "Children": [
+                                          {
+                                            "Type": "SimpleLambdaExpressionSyntax",
+                                            "Kind": "8642",
+                                            "Text": "p => p.Id == id",
+                                            "Span": {
+                                              "Start": 372,
+                                              "End": 387,
+                                              "Length": 15
+                                            },
+                                            "Location": {
+                                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                              "Span": {
+                                                "Start": {
+                                                  "Line": 14,
+                                                  "Character": 40
+                                                },
+                                                "End": {
+                                                  "Line": 14,
+                                                  "Character": 55
+                                                }
+                                              },
+                                              "HasMappedPath": false
+                                            },
+                                            "Properties": {},
+                                            "Children": [
+                                              {
+                                                "Type": "ParameterSyntax",
+                                                "Kind": "8908",
+                                                "Text": "p",
+                                                "Span": {
+                                                  "Start": 372,
+                                                  "End": 373,
+                                                  "Length": 1
+                                                },
+                                                "Location": {
+                                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                  "Span": {
+                                                    "Start": {
+                                                      "Line": 14,
+                                                      "Character": 40
+                                                    },
+                                                    "End": {
+                                                      "Line": 14,
+                                                      "Character": 41
+                                                    }
+                                                  },
+                                                  "HasMappedPath": false
+                                                },
+                                                "Properties": {},
+                                                "Children": []
+                                              },
+                                              {
+                                                "Type": "BinaryExpressionSyntax",
+                                                "Kind": "8680",
+                                                "Text": "p.Id == id",
+                                                "Span": {
+                                                  "Start": 377,
+                                                  "End": 387,
+                                                  "Length": 10
+                                                },
+                                                "Location": {
+                                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                  "Span": {
+                                                    "Start": {
+                                                      "Line": 14,
+                                                      "Character": 45
+                                                    },
+                                                    "End": {
+                                                      "Line": 14,
+                                                      "Character": 55
+                                                    }
+                                                  },
+                                                  "HasMappedPath": false
+                                                },
+                                                "Properties": {},
+                                                "Children": [
+                                                  {
+                                                    "Type": "MemberAccessExpressionSyntax",
+                                                    "Kind": "8689",
+                                                    "Text": "p.Id",
+                                                    "Span": {
+                                                      "Start": 377,
+                                                      "End": 381,
+                                                      "Length": 4
+                                                    },
+                                                    "Location": {
+                                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                      "Span": {
+                                                        "Start": {
+                                                          "Line": 14,
+                                                          "Character": 45
+                                                        },
+                                                        "End": {
+                                                          "Line": 14,
+                                                          "Character": 49
+                                                        }
+                                                      },
+                                                      "HasMappedPath": false
+                                                    },
+                                                    "Properties": {},
+                                                    "Children": [
+                                                      {
+                                                        "Type": "IdentifierNameSyntax",
+                                                        "Kind": "8616",
+                                                        "Text": "p",
+                                                        "Span": {
+                                                          "Start": 377,
+                                                          "End": 378,
+                                                          "Length": 1
+                                                        },
+                                                        "Location": {
+                                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                          "Span": {
+                                                            "Start": {
+                                                              "Line": 14,
+                                                              "Character": 45
+                                                            },
+                                                            "End": {
+                                                              "Line": 14,
+                                                              "Character": 46
+                                                            }
+                                                          },
+                                                          "HasMappedPath": false
+                                                        },
+                                                        "Properties": {},
+                                                        "Children": []
+                                                      },
+                                                      {
+                                                        "Type": "IdentifierNameSyntax",
+                                                        "Kind": "8616",
+                                                        "Text": "Id",
+                                                        "Span": {
+                                                          "Start": 379,
+                                                          "End": 381,
+                                                          "Length": 2
+                                                        },
+                                                        "Location": {
+                                                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                          "Span": {
+                                                            "Start": {
+                                                              "Line": 14,
+                                                              "Character": 47
+                                                            },
+                                                            "End": {
+                                                              "Line": 14,
+                                                              "Character": 49
+                                                            }
+                                                          },
+                                                          "HasMappedPath": false
+                                                        },
+                                                        "Properties": {},
+                                                        "Children": []
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "Type": "IdentifierNameSyntax",
+                                                    "Kind": "8616",
+                                                    "Text": "id",
+                                                    "Span": {
+                                                      "Start": 385,
+                                                      "End": 387,
+                                                      "Length": 2
+                                                    },
+                                                    "Location": {
+                                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                                      "Span": {
+                                                        "Start": {
+                                                          "Line": 14,
+                                                          "Character": 53
+                                                        },
+                                                        "End": {
+                                                          "Line": 14,
+                                                          "Character": 55
+                                                        }
+                                                      },
+                                                      "HasMappedPath": false
+                                                    },
+                                                    "Properties": {},
+                                                    "Children": []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Type": "MethodDeclarationSyntax",
+                    "Kind": "8875",
+                    "Text": "public IEnumerable<Product> GetAllProducts() => _products.AsReadOnly();",
+                    "Span": {
+                      "Start": 404,
+                      "End": 475,
+                      "Length": 71
+                    },
+                    "Location": {
+                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                      "Span": {
+                        "Start": {
+                          "Line": 17,
+                          "Character": 4
+                        },
+                        "End": {
+                          "Line": 17,
+                          "Character": 75
+                        }
+                      },
+                      "HasMappedPath": false
+                    },
+                    "Properties": {
+                      "MethodName": "GetAllProducts",
+                      "IsAsync": false,
+                      "ReturnType": "IEnumerable<Product>",
+                      "Modifiers": [
+                        "public"
+                      ]
+                    },
+                    "Children": [
+                      {
+                        "Type": "GenericNameSyntax",
+                        "Kind": "8618",
+                        "Text": "IEnumerable<Product>",
+                        "Span": {
+                          "Start": 411,
+                          "End": 431,
+                          "Length": 20
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 17,
+                              "Character": 11
+                            },
+                            "End": {
+                              "Line": 17,
+                              "Character": 31
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "TypeArgumentListSyntax",
+                            "Kind": "8619",
+                            "Text": "<Product>",
+                            "Span": {
+                              "Start": 422,
+                              "End": 431,
+                              "Length": 9
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 17,
+                                  "Character": 22
+                                },
+                                "End": {
+                                  "Line": 17,
+                                  "Character": 31
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "IdentifierNameSyntax",
+                                "Kind": "8616",
+                                "Text": "Product",
+                                "Span": {
+                                  "Start": 423,
+                                  "End": 430,
+                                  "Length": 7
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 17,
+                                      "Character": 23
+                                    },
+                                    "End": {
+                                      "Line": 17,
+                                      "Character": 30
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "ParameterListSyntax",
+                        "Kind": "8906",
+                        "Text": "()",
+                        "Span": {
+                          "Start": 446,
+                          "End": 448,
+                          "Length": 2
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 17,
+                              "Character": 46
+                            },
+                            "End": {
+                              "Line": 17,
+                              "Character": 48
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": []
+                      },
+                      {
+                        "Type": "ArrowExpressionClauseSyntax",
+                        "Kind": "8917",
+                        "Text": "=> _products.AsReadOnly()",
+                        "Span": {
+                          "Start": 449,
+                          "End": 474,
+                          "Length": 25
+                        },
+                        "Location": {
+                          "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                          "Span": {
+                            "Start": {
+                              "Line": 17,
+                              "Character": 49
+                            },
+                            "End": {
+                              "Line": 17,
+                              "Character": 74
+                            }
+                          },
+                          "HasMappedPath": false
+                        },
+                        "Properties": {},
+                        "Children": [
+                          {
+                            "Type": "InvocationExpressionSyntax",
+                            "Kind": "8634",
+                            "Text": "_products.AsReadOnly()",
+                            "Span": {
+                              "Start": 452,
+                              "End": 474,
+                              "Length": 22
+                            },
+                            "Location": {
+                              "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                              "Span": {
+                                "Start": {
+                                  "Line": 17,
+                                  "Character": 52
+                                },
+                                "End": {
+                                  "Line": 17,
+                                  "Character": 74
+                                }
+                              },
+                              "HasMappedPath": false
+                            },
+                            "Properties": {},
+                            "Children": [
+                              {
+                                "Type": "MemberAccessExpressionSyntax",
+                                "Kind": "8689",
+                                "Text": "_products.AsReadOnly",
+                                "Span": {
+                                  "Start": 452,
+                                  "End": 472,
+                                  "Length": 20
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 17,
+                                      "Character": 52
+                                    },
+                                    "End": {
+                                      "Line": 17,
+                                      "Character": 72
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": [
+                                  {
+                                    "Type": "IdentifierNameSyntax",
+                                    "Kind": "8616",
+                                    "Text": "_products",
+                                    "Span": {
+                                      "Start": 452,
+                                      "End": 461,
+                                      "Length": 9
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 17,
+                                          "Character": 52
+                                        },
+                                        "End": {
+                                          "Line": 17,
+                                          "Character": 61
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  },
+                                  {
+                                    "Type": "IdentifierNameSyntax",
+                                    "Kind": "8616",
+                                    "Text": "AsReadOnly",
+                                    "Span": {
+                                      "Start": 462,
+                                      "End": 472,
+                                      "Length": 10
+                                    },
+                                    "Location": {
+                                      "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                      "Span": {
+                                        "Start": {
+                                          "Line": 17,
+                                          "Character": 62
+                                        },
+                                        "End": {
+                                          "Line": 17,
+                                          "Character": 72
+                                        }
+                                      },
+                                      "HasMappedPath": false
+                                    },
+                                    "Properties": {},
+                                    "Children": []
+                                  }
+                                ]
+                              },
+                              {
+                                "Type": "ArgumentListSyntax",
+                                "Kind": "8636",
+                                "Text": "()",
+                                "Span": {
+                                  "Start": 472,
+                                  "End": 474,
+                                  "Length": 2
+                                },
+                                "Location": {
+                                  "Path": "E:\\Github\\CSharpAST\\TestFiles\\TestApplications\\SDKStyleDLL\\ProductService.cs",
+                                  "Span": {
+                                    "Start": {
+                                      "Line": 17,
+                                      "Character": 72
+                                    },
+                                    "End": {
+                                      "Line": 17,
+                                      "Character": 74
+                                    }
+                                  },
+                                  "HasMappedPath": false
+                                },
+                                "Properties": {},
+                                "Children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

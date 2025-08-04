@@ -8,6 +8,11 @@ namespace CSharpAST.Core.Analysis;
 public interface ISyntaxAnalyzer
 {
     /// <summary>
+    /// Gets the capabilities of this analyzer, including supported file types and project types
+    /// </summary>
+    AnalyzerCapabilities Capabilities { get; }
+
+    /// <summary>
     /// Analyzes a syntax tree and generates an AST analysis (for C# and VB.NET files)
     /// </summary>
     /// <param name="root">The root syntax node</param>
@@ -30,18 +35,20 @@ public interface ISyntaxAnalyzer
     /// <returns>AST node representation</returns>
     ASTNode AnalyzeNode(SyntaxNode node);
 
+    // Legacy support methods - these will be replaced by Capabilities property
     /// <summary>
     /// Determines if this analyzer supports the specified file type
     /// </summary>
     /// <param name="filePath">The file path to check</param>
     /// <returns>True if the file type is supported by this analyzer</returns>
+    [Obsolete("Use Capabilities.SupportsFile(filePath) instead")]
     bool SupportsFile(string filePath);
 
     /// <summary>
     /// Gets the project file extensions that this analyzer is responsible for
     /// </summary>
     /// <returns>Array of project file extensions (e.g., [".csproj"] for C# analyzer)</returns>
-    [Obsolete("Use SupportsProject(string projectPath) instead for consistency with SupportsFile method", false)]
+    [Obsolete("Use Capabilities.SupportedProjectExtensions instead")]
     string[] GetSupportedProjectExtensions();
 
     /// <summary>
@@ -50,5 +57,6 @@ public interface ISyntaxAnalyzer
     /// </summary>
     /// <param name="projectPath">The project file path to check</param>
     /// <returns>True if the project file type is supported by this analyzer</returns>
+    [Obsolete("Use Capabilities.SupportsProject(projectPath) instead")]
     bool SupportsProject(string projectPath);
 }

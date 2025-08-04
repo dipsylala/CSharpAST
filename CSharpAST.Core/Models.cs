@@ -8,11 +8,6 @@ public class ASTAnalysis
     public string SourceFile { get; set; } = string.Empty;
     public DateTime GeneratedAt { get; set; }
     public ASTNode RootNode { get; set; } = new ASTNode();
-    public List<AsyncMethodInfo> AsyncMethods { get; set; } = new List<AsyncMethodInfo>();
-    public List<ClassInfo> Classes { get; set; } = new List<ClassInfo>();
-    public List<InterfaceInfo> Interfaces { get; set; } = new List<InterfaceInfo>();
-    public List<PropertyInfo> Properties { get; set; } = new List<PropertyInfo>();
-    public List<UsingDirectiveInfo> UsingDirectives { get; set; } = new List<UsingDirectiveInfo>();
 }
 
 public class ASTNode

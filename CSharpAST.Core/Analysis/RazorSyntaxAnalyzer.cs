@@ -16,6 +16,18 @@ namespace CSharpAST.Core.Analysis
         private static readonly Regex CSharpCodePattern = new Regex(@"@\{([^}]*)\}", RegexOptions.Multiline | RegexOptions.Compiled);
         private static readonly Regex CSharpExpressionPattern = new Regex(@"@([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Gets the capabilities of this Razor analyzer
+        /// </summary>
+        public AnalyzerCapabilities Capabilities { get; } = new AnalyzerCapabilities
+        {
+            Name = "Razor Syntax Analyzer",
+            Description = "Analyzes Razor/CSHTML files and extracts both Razor syntax and embedded C# code",
+            Language = "Razor/CSHTML",
+            SupportedFileExtensions = new[] { ".cshtml", ".razor" },
+            SupportedProjectExtensions = new string[0] // Razor files are included in other project types, don't own project files
+        };
+
         public RazorSyntaxAnalyzer()
         {
             // Create a basic Razor project engine for parsing
@@ -298,20 +310,17 @@ namespace CSharpAST.Core.Analysis
 
         public bool SupportsFile(string filePath)
         {
-            return IsRazorFile(filePath);
+            return Capabilities.SupportsFile(filePath);
         }
 
         public string[] GetSupportedProjectExtensions()
         {
-            // Razor files are typically part of web projects, which are usually C# projects
-            // But Razor itself doesn't have its own project type
-            return new string[0]; // Empty array - Razor files are included in other project types
+            return Capabilities.SupportedProjectExtensions;
         }
 
         public bool SupportsProject(string projectPath)
         {
-            // Razor analyzer doesn't own any project file types
-            return false;
+            return Capabilities.SupportsProject(projectPath);
         }
     }
 }

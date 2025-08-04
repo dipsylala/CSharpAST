@@ -12,84 +12,43 @@ using CSharpAST.Core.Output;
 namespace CSharpAST.Core;
 
 /// <summary>
-/// AST Generator for analyzing C# source files and generating comprehensive AST representations.
-/// This class has been refactored to use focused components for better maintainability.
-/// Supports both standard and high-performance processing modes.
+/// AST Generator responsible for orchestrating the analysis of different input types.
+/// This class determines the appropriate analyzers and processors based on the input 
+/// (solution, project, or individual files) and wires them together for optimal processing.
 /// </summary>
 public class ASTGenerator : IDisposable
 {
-    private readonly ISyntaxAnalyzer _syntaxAnalyzer;
-    private readonly IFileProcessor _fileProcessor;
     private readonly IOutputManager _outputManager;
     private readonly bool _verbose;
+    private readonly int? _maxConcurrency;
+    private readonly ProcessingMode _processingMode;
     private bool _disposed = false;
 
-    /// <summary>
-    /// Creates a standard ASTGenerator with basic performance optimizations and unified file processing (C# + Razor + VB.NET)
-    /// </summary>
-    public ASTGenerator(bool verbose = false)
-        : this(new CSharpSyntaxAnalyzer(), new UnifiedFileProcessor(new CSharpSyntaxAnalyzer()), new OutputManager(), verbose)
+    public enum ProcessingMode
     {
+        /// <summary>Sequential processing, supports all file types</summary>
+        Unified,
+        /// <summary>Concurrent processing, supports all file types</summary>
+        Concurrent
     }
 
     /// <summary>
-    /// Creates a high-performance ASTGenerator with concurrent processing and memory optimizations.
-    /// Supports only C# files for maximum performance.
+    /// Creates an ASTGenerator with the specified processing mode
     /// </summary>
-    public static ASTGenerator CreateOptimized(bool verbose = false, int? maxConcurrency = null)
+    public ASTGenerator(ProcessingMode mode = ProcessingMode.Concurrent, bool verbose = false, int? maxConcurrency = null)
     {
-        return new ASTGenerator(
-            new CSharpSyntaxAnalyzer(), 
-            new ConcurrentFileProcessor(new CSharpSyntaxAnalyzer(), maxConcurrency), 
-            new OutputManager(), 
-            verbose);
+        _outputManager = new OutputManager();
+        _verbose = verbose;
+        _maxConcurrency = maxConcurrency;
+        _processingMode = mode;
     }
 
     /// <summary>
-    /// Creates a high-performance ASTGenerator with concurrent processing for multi-language projects.
-    /// Supports C#, VB.NET, and Razor files with concurrent processing.
-    /// </summary>
-    public static ASTGenerator CreateConcurrentUnified(bool verbose = false, int? maxConcurrency = null)
-    {
-        var analyzers = new ISyntaxAnalyzer[]
-        {
-            new CSharpSyntaxAnalyzer(),
-            new VBSyntaxAnalyzer(),
-            new RazorSyntaxAnalyzer()
-        };
-        
-        return new ASTGenerator(
-            new CSharpSyntaxAnalyzer(), 
-            new ConcurrentFileProcessor(analyzers, maxConcurrency), 
-            new OutputManager(), 
-            verbose);
-    }
-
-    /// <summary>
-    /// Creates a unified ASTGenerator that supports C#, VB.NET, and Razor files with optimized processing
+    /// Factory method to create a unified ASTGenerator for sequential processing
     /// </summary>
     public static ASTGenerator CreateUnified(bool verbose = false, int? maxConcurrency = null)
     {
-        var analyzers = new ISyntaxAnalyzer[]
-        {
-            new CSharpSyntaxAnalyzer(),
-            new VBSyntaxAnalyzer(),
-            new RazorSyntaxAnalyzer()
-        };
-        
-        return new ASTGenerator(
-            new CSharpSyntaxAnalyzer(), 
-            new UnifiedFileProcessor(analyzers), 
-            new OutputManager(), 
-            verbose);
-    }
-
-    public ASTGenerator(ISyntaxAnalyzer syntaxAnalyzer, IFileProcessor fileProcessor, IOutputManager outputManager, bool verbose = false)
-    {
-        _syntaxAnalyzer = syntaxAnalyzer;
-        _fileProcessor = fileProcessor;
-        _outputManager = outputManager;
-        _verbose = verbose;
+        return new ASTGenerator(ProcessingMode.Unified, verbose, maxConcurrency);
     }
 
     public async Task GenerateASTAsync(string inputPath, string outputPath, string format)
@@ -112,27 +71,23 @@ public class ASTGenerator : IDisposable
                 
                 if (extension == ".sln")
                 {
-                    // Solution file
-                    analysis = await _fileProcessor.ProcessSolutionAsync(inputPath);
+                    // Solution file - wire up appropriate processor
+                    analysis = await ProcessSolutionAsync(inputPath);
                 }
-                else if (_fileProcessor.IsProjectSupported(inputPath))
+                else if (IsProjectFile(inputPath))
                 {
-                    // Project file (.csproj, .vbproj, etc.)
-                    analysis = await _fileProcessor.ProcessProjectAsync(inputPath);
+                    // Project file (.csproj, .vbproj, etc.) - wire up appropriate processor
+                    analysis = await ProcessProjectAsync(inputPath);
                 }
-                else if (_fileProcessor.IsFileSupported(inputPath))
+                else if (IsSourceFile(inputPath))
                 {
-                    // Source file (.cs, .vb, .cshtml, etc.)
-                    analysis = await _fileProcessor.ProcessFileAsync(inputPath);
+                    // Source file (.cs, .vb, .cshtml, etc.) - wire up appropriate analyzer
+                    analysis = await ProcessFileAsync(inputPath);
                 }
                 else
                 {
                     throw new ArgumentException($"Unsupported file type: {Path.GetExtension(inputPath)}");
                 }
-            }
-            else if (Directory.Exists(inputPath))
-            {
-                analysis = await ProcessDirectoryAsync(inputPath);
             }
             else
             {
@@ -141,22 +96,27 @@ public class ASTGenerator : IDisposable
 
             if (analysis != null)
             {
-                // Construct proper output file path based on input
-                string outputFilePath;
-                if (File.Exists(inputPath))
+                var extension = Path.GetExtension(inputPath).ToLowerInvariant();
+                
+                if (extension == ".sln")
                 {
-                    // For single file input, create output filename based on input filename
-                    var inputFileName = Path.GetFileNameWithoutExtension(inputPath);
-                    outputFilePath = Path.Combine(outputPath, inputFileName);
+                    // For solution files, use structured output to preserve directory structure
+                    await _outputManager.WriteStructuredOutputAsync(analysis, outputPath, format, Path.GetDirectoryName(inputPath));
+                }
+                else if (IsProjectFile(inputPath))
+                {
+                    // For project files, use structured output to preserve directory structure
+                    await _outputManager.WriteStructuredOutputAsync(analysis, outputPath, format, Path.GetDirectoryName(inputPath));
                 }
                 else
                 {
-                    // For directory input, use directory name
-                    var directoryName = Path.GetFileName(inputPath.TrimEnd(Path.DirectorySeparatorChar));
-                    outputFilePath = Path.Combine(outputPath, directoryName);
+                    // For individual source files, create output filename based on input filename
+                    var inputFileName = Path.GetFileNameWithoutExtension(inputPath);
+                    var outputFilePath = Path.Combine(outputPath, inputFileName);
+                    
+                    // Use regular output for single files
+                    await _outputManager.WriteAsync(analysis, outputFilePath, format);
                 }
-                
-                await _outputManager.WriteAsync(analysis, outputFilePath, format);
                 
                 stopwatch.Stop();
                 if (_verbose)
@@ -178,106 +138,261 @@ public class ASTGenerator : IDisposable
         }
     }
 
-    private async Task<ASTAnalysis?> ProcessDirectoryAsync(string inputDir)
+    /// <summary>
+    /// Determines if a file is a supported project file type by checking analyzer capabilities
+    /// </summary>
+    private bool IsProjectFile(string filePath)
     {
-        // First check for project or solution files
-        var solutionFiles = Directory.GetFiles(inputDir, "*.sln");
-        
-        // Look for project files using analyzer-driven detection
-        var allProjectFiles = Directory.GetFiles(inputDir, "*.*proj"); // Get all potential project files (.csproj, .vbproj, etc.)
-        var supportedProjectFiles = allProjectFiles.Where(file => _fileProcessor.IsProjectSupported(file)).ToArray();
+        return AnalyzerRegistry.IsProjectSupported(filePath);
+    }
 
-        if (solutionFiles.Length > 0)
+    /// <summary>
+    /// Determines if a file is a supported source file type by checking analyzer capabilities
+    /// </summary>
+    private bool IsSourceFile(string filePath)
+    {
+        return AnalyzerRegistry.IsFileSupported(filePath);
+    }
+
+    /// <summary>
+    /// Creates the appropriate file processor based on processing mode and input requirements
+    /// </summary>
+    private IFileProcessor CreateFileProcessor(string inputPath)
+    {
+        // Determine what analyzers are needed based on the input
+        var requiredAnalyzers = DetermineRequiredAnalyzers(inputPath);
+        
+        return _processingMode switch
         {
-            if (_verbose)
-                Console.WriteLine($"Found solution file: {solutionFiles[0]}");
-            return await _fileProcessor.ProcessSolutionAsync(solutionFiles[0]);
+            ProcessingMode.Concurrent => new ConcurrentFileProcessor(requiredAnalyzers, _maxConcurrency),
+            ProcessingMode.Unified => new UnifiedFileProcessor(requiredAnalyzers),
+            _ => throw new ArgumentException($"Unsupported processing mode: {_processingMode}")
+        };
+    }
+
+    /// <summary>
+    /// Determines which syntax analyzers are needed based on the input path
+    /// </summary>
+    private ISyntaxAnalyzer[] DetermineRequiredAnalyzers(string inputPath)
+    {
+        var analyzers = new List<ISyntaxAnalyzer>();
+
+        // For solutions and projects, scan for file types
+        var extension = Path.GetExtension(inputPath).ToLowerInvariant();
+        
+        if (extension == ".sln")
+        {
+            // For solution files, include all analyzers as we don't know what's inside
+            analyzers.AddRange(AnalyzerRegistry.GetAllAnalyzers());
         }
-        else if (supportedProjectFiles.Length > 0)
+        else if (IsProjectFile(inputPath))
         {
-            if (_verbose)
-                Console.WriteLine($"Found project file: {supportedProjectFiles[0]}");
-            return await _fileProcessor.ProcessProjectAsync(supportedProjectFiles[0]);
+            // For project files, find analyzers that support this project type or can process files within it
+            analyzers.AddRange(AnalyzerRegistry.GetAnalyzersForProject(inputPath));
+            
+            // For C# projects, also include analyzers that might process files within the project
+            if (extension == ".csproj")
+            {
+                var razorAnalyzer = AnalyzerRegistry.GetAllAnalyzers()
+                    .FirstOrDefault(a => a.GetType().Name == "RazorSyntaxAnalyzer");
+                if (razorAnalyzer != null && !analyzers.Contains(razorAnalyzer))
+                {
+                    analyzers.Add(razorAnalyzer);
+                }
+            }
+            
+            // Ensure we have at least one analyzer for any project file
+            if (!analyzers.Any())
+            {
+                var fallbackAnalyzer = AnalyzerRegistry.GetAllAnalyzers().FirstOrDefault();
+                if (fallbackAnalyzer != null)
+                {
+                    analyzers.Add(fallbackAnalyzer);
+                }
+            }
         }
         else
         {
-            // Fallback to processing all supported files as a combined analysis
-            var allFiles = Directory.GetFiles(inputDir, "*.*", SearchOption.AllDirectories)
-                .Where(file => _fileProcessor.IsFileSupported(file))
-                .ToArray();
-            
-            // Group files by type for better reporting
-            var filesByType = allFiles.GroupBy(f => Path.GetExtension(f).ToLowerInvariant()).ToList();
-            
-            if (_verbose)
-            {
-                foreach (var group in filesByType)
-                {
-                    var fileType = group.Key switch
-                    {
-                        ".cs" => "C#",
-                        ".vb" => "VB.NET",
-                        ".cshtml" => "Razor",
-                        _ => group.Key
-                    };
-                    Console.WriteLine($"Found {group.Count()} {fileType} files to process");
-                }
-            }
-
-            if (allFiles.Length == 0)
-                return null;
-
-            var combinedAnalysis = new ASTAnalysis
-            {
-                SourceFile = inputDir,
-                GeneratedAt = DateTime.UtcNow,
-                RootNode = new ASTNode
-                {
-                    Type = "DirectoryRoot",
-                    Kind = "Directory",
-                    Text = $"Directory: {Path.GetFileName(inputDir)}",
-                    Properties = new Dictionary<string, object>
-                    {
-                        ["DirectoryPath"] = inputDir,
-                        ["TotalFileCount"] = allFiles.Length,
-                        ["FileTypes"] = string.Join(", ", filesByType.Select(g => $"{g.Key}({g.Count()})"))
-                    },
-                    Children = new List<ASTNode>()
-                }
-            };
-
-            foreach (var file in allFiles)
-            {
-                var fileAnalysis = await _fileProcessor.ProcessFileAsync(file);
-                if (fileAnalysis?.RootNode != null)
-                {
-                    combinedAnalysis.RootNode.Children.Add(fileAnalysis.RootNode);
-                }
-            }
-
-            return combinedAnalysis;
+            // For individual source files, add the specific analyzer
+            var fileAnalyzer = AnalyzerRegistry.GetAnalyzerForFile(inputPath);
+            analyzers.Add(fileAnalyzer);
         }
+
+        return analyzers.ToArray();
     }
 
-    // Legacy methods for backward compatibility with existing tests and CLI
+    /// <summary>
+    /// Gets all available syntax analyzers from the registry
+    /// </summary>
+    private ISyntaxAnalyzer[] GetAllAnalyzers()
+    {
+        return AnalyzerRegistry.GetAllAnalyzers();
+    }
+
+    /// <summary>
+    /// Gets the appropriate syntax analyzer for a specific file from the registry
+    /// </summary>
+    private ISyntaxAnalyzer GetAnalyzerForFile(string filePath)
+    {
+        return AnalyzerRegistry.GetAnalyzerForFile(filePath);
+    }
+
+    // Public methods that orchestrate the appropriate processor creation
     public async Task<ASTAnalysis?> ProcessFileAsync(string filePath)
     {
-        return await _fileProcessor.ProcessFileAsync(filePath);
+        using var fileProcessor = CreateFileProcessor(filePath);
+        return await fileProcessor.ProcessFileAsync(filePath);
     }
 
     public async Task<ASTAnalysis?> ProcessProjectAsync(string projectPath, CancellationToken cancellationToken = default)
     {
-        return await _fileProcessor.ProcessProjectAsync(projectPath, cancellationToken);
+        using var fileProcessor = CreateFileProcessor(projectPath);
+        
+        // Provide feedback about project processing
+        if (File.Exists(projectPath))
+        {
+            var projectName = Path.GetFileNameWithoutExtension(projectPath);
+            Console.WriteLine($"Processing project: {projectName}");
+            
+            try
+            {
+                // Get project source files to show what will be processed
+                var analyzers = DetermineRequiredAnalyzers(projectPath);
+                var sourceFiles = ProjectFileParser.GetIncludedSourceFiles(projectPath, analyzers);
+                
+                if (sourceFiles.Any())
+                {
+                    Console.WriteLine($"Found {sourceFiles.Count} source file(s) in project:");
+                    foreach (var sourceFile in sourceFiles.Take(10)) // Limit to first 10 to avoid spam
+                    {
+                        var fileName = Path.GetFileName(sourceFile);
+                        Console.WriteLine($"  • {fileName}");
+                    }
+                    
+                    if (sourceFiles.Count > 10)
+                    {
+                        Console.WriteLine($"  ... and {sourceFiles.Count - 10} more file(s)");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Warning: No source files found in project.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Warning: Could not analyze project structure: {ex.Message}");
+            }
+        }
+        
+        return await fileProcessor.ProcessProjectAsync(projectPath, cancellationToken);
     }
 
     public async Task<ASTAnalysis?> ProcessSolutionAsync(string solutionPath, CancellationToken cancellationToken = default)
     {
-        return await _fileProcessor.ProcessSolutionAsync(solutionPath, cancellationToken);
+        using var fileProcessor = CreateFileProcessor(solutionPath);
+        
+        // First, get the solution info to provide feedback about projects
+        if (File.Exists(solutionPath))
+        {
+            var solutionInfo = SolutionFileParser.GetSolutionInfo(solutionPath);
+            Console.WriteLine($"Found solution: {solutionInfo.Name}");
+            
+            // Parse all projects from solution (not just supported ones)
+            var allProjects = GetAllProjectsFromSolution(solutionPath);
+            var supportedProjects = solutionInfo.ProjectFiles; // These are the ones that will be processed
+            
+            Console.WriteLine($"Discovered {allProjects.Count} project(s):");
+            
+            foreach (var projectFile in allProjects)
+            {
+                var fileName = Path.GetFileName(projectFile);
+                if (supportedProjects.Contains(projectFile))
+                {
+                    Console.WriteLine($"  ✓ {fileName} - will be processed");
+                }
+                else
+                {
+                    var extension = Path.GetExtension(projectFile);
+                    Console.WriteLine($"  ⚠ {fileName} - unsupported project type ({extension})");
+                }
+            }
+            
+            var unsupportedCount = allProjects.Count - supportedProjects.Count;
+            if (unsupportedCount > 0)
+            {
+                Console.WriteLine($"Warning: {unsupportedCount} project(s) will be skipped due to unsupported file types.");
+                Console.WriteLine("Supported project types: .csproj, .vbproj, .fsproj");
+            }
+            
+            if (supportedProjects.Any())
+            {
+                Console.WriteLine($"Processing {supportedProjects.Count} supported project(s)...");
+            }
+            else
+            {
+                Console.WriteLine("Warning: No supported projects found in solution.");
+            }
+        }
+        
+        return await fileProcessor.ProcessSolutionAsync(solutionPath, cancellationToken);
+    }
+
+    /// <summary>
+    /// Gets all project references from a solution file, including unsupported ones
+    /// </summary>
+    private List<string> GetAllProjectsFromSolution(string solutionPath)
+    {
+        var solutionDir = Path.GetDirectoryName(solutionPath) ?? "";
+        var projectPaths = new List<string>();
+        
+        if (!File.Exists(solutionPath))
+            return projectPaths;
+        
+        var lines = File.ReadAllLines(solutionPath);
+        
+        foreach (var line in lines)
+        {
+            if (line.StartsWith("Project("))
+            {
+                // Parse project line format: Project("{GUID}") = "ProjectName", "RelativePath", "{ProjectGUID}"
+                try
+                {
+                    // Find the equals sign and work from there
+                    var equalsIndex = line.IndexOf(" = ");
+                    if (equalsIndex >= 0)
+                    {
+                        var afterEquals = line.Substring(equalsIndex + 3);
+                        
+                        // Split by comma to get the three parts
+                        var parts = afterEquals.Split(',').Select(p => p.Trim()).ToArray();
+                        if (parts.Length >= 2)
+                        {
+                            // The second part is the relative path, remove quotes
+                            var relativePath = parts[1].Trim('"', ' ');
+                            if (!string.IsNullOrWhiteSpace(relativePath) && Path.HasExtension(relativePath))
+                            {
+                                var absolutePath = Path.GetFullPath(Path.Combine(solutionDir, relativePath));
+                                projectPaths.Add(absolutePath);
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    // Skip malformed project lines
+                }
+            }
+        }
+        
+        return projectPaths;
     }
 
     public ASTNode AnalyzeNode(SyntaxNode node)
     {
-        return _syntaxAnalyzer.AnalyzeNode(node);
+        // Get C# analyzer from registry for individual node analysis
+        var analyzer = AnalyzerRegistry.GetAnalyzerByTypeName("CSharpSyntaxAnalyzer");
+        return analyzer.AnalyzeNode(node);
     }
 
     public async Task WriteOutputAsync(ASTAnalysis analysis, string outputPath)
@@ -288,21 +403,17 @@ public class ASTGenerator : IDisposable
     // Additional legacy methods used by integration tests
     public async Task<ASTAnalysis?> GenerateFromFileAsync(string filePath)
     {
-        return await _fileProcessor.ProcessFileAsync(filePath);
+        return await ProcessFileAsync(filePath);
     }
 
     public async Task<ProjectAnalysis?> GenerateFromProjectAsync(string projectPath)
     {
-        ASTAnalysis? analysis;
+        ASTAnalysis? analysis = null;
 
-        // Check if it's a directory or a specific project file
-        if (Directory.Exists(projectPath))
+        // Only handle specific project files, not directories
+        if (File.Exists(projectPath) && IsProjectFile(projectPath))
         {
-            analysis = await ProcessDirectoryAsync(projectPath);
-        }
-        else if (File.Exists(projectPath) && _fileProcessor.IsProjectSupported(projectPath))
-        {
-            analysis = await _fileProcessor.ProcessProjectAsync(projectPath);
+            analysis = await ProcessProjectAsync(projectPath);
         }
         else
         {
@@ -340,7 +451,9 @@ public class ASTGenerator : IDisposable
 
     public ASTAnalysis AnalyzeSyntaxTree(SyntaxNode root, string filePath)
     {
-        return _syntaxAnalyzer.AnalyzeSyntaxTree(root, filePath);
+        // Create the appropriate analyzer based on file type
+        var analyzer = AnalyzerRegistry.GetAnalyzerForFile(filePath);
+        return analyzer.AnalyzeSyntaxTree(root, filePath);
     }
 
     public void Dispose()
@@ -353,13 +466,7 @@ public class ASTGenerator : IDisposable
     {
         if (!_disposed)
         {
-            if (disposing)
-            {
-                if (_fileProcessor is IDisposable disposableProcessor)
-                {
-                    disposableProcessor.Dispose();
-                }
-            }
+            // No longer need to dispose file processors since they're created on-demand with using statements
             _disposed = true;
         }
     }
