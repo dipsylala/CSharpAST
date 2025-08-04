@@ -153,11 +153,12 @@ dotnet build --configuration Release
 # Run all tests
 dotnet test
 
+# Run integration tests
+dotnet test CSharpAST.IntegrationTests
+
 # Run performance benchmarks with thread scaling analysis
 dotnet run --project CSharpAST.PerformanceTest
 
-# Run integration tests
-dotnet test CSharpAST.IntegrationTests
 ```
 
 ## Performance Testing

@@ -9,6 +9,7 @@ using System.Linq;
 
 namespace CSharpAST.IntegrationTests
 {
+    [Collection("CoreFunctionalityTests")]
     public class RazorCSHTMLIntegrationTests : TestBase
     {
 

@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace CSharpAST.IntegrationTests;
 
-[Collection("ProjectFileTests")]
+[Collection("CoreFunctionalityTests")]
 public class ASTPerformanceIntegrationTests : TestBase
 {
     private readonly ILogger<ASTPerformanceIntegrationTests> _performanceLogger;

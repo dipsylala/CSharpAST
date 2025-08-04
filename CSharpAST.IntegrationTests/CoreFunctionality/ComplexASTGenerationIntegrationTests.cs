@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace CSharpAST.IntegrationTests;
 
-[Collection("ProjectFileTests")]
+[Collection("CoreFunctionalityTests")]
 public class ComplexASTGenerationIntegrationTests : TestBase
 {
     private readonly ILogger<ComplexASTGenerationIntegrationTests> _complexLogger;

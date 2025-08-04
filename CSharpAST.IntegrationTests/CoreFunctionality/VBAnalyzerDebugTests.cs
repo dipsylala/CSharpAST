@@ -4,6 +4,7 @@ using Xunit;
 
 namespace CSharpAST.IntegrationTests;
 
+[Collection("CoreFunctionalityTests")]
 public class VBAnalyzerDebugTests
 {
     [Fact]

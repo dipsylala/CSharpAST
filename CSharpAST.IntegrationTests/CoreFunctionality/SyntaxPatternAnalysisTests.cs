@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace CSharpAST.IntegrationTests;
 
+[Collection("CoreFunctionalityTests")]
 public class SyntaxPatternAnalysisTests : TestBase
 {
     private readonly ILogger<SyntaxPatternAnalysisTests> _syntaxLogger;
