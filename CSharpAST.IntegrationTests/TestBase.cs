@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CSharpAST.Core;
+using CSharpAST.Core.Output;
 
 namespace CSharpAST.IntegrationTests;
 
@@ -16,6 +17,7 @@ public abstract class TestBase
     {
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole());
+        services.AddTransient<IOutputManager, JsonOutputManager>();
         services.AddTransient<ASTGenerator>();
         
         _serviceProvider = services.BuildServiceProvider();

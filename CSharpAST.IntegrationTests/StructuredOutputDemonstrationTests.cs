@@ -1,10 +1,20 @@
 using FluentAssertions;
 using CSharpAST.Core;
+using CSharpAST.Core.Output;
 
 namespace CSharpAST.IntegrationTests;
 
 public class StructuredOutputDemonstrationTests : TestBase
 {
+    private static IOutputManager CreateOutputManager(string format = "json")
+    {
+        return format.ToLowerInvariant() switch
+        {
+            "json" => new JsonOutputManager(),
+            "text" or "txt" => new TextOutputManager(),
+            _ => new JsonOutputManager() // Default fallback
+        };
+    }
     [Fact]
     public async Task GenerateStructuredOutput_SingleFile_ShouldCreateOrganizedOutput()
     {
@@ -16,10 +26,11 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
 
         // Act - Generate AST with structured output
-        var generator = new ASTGenerator(verbose: true); // Use concurrent mode (default)
+        var outputManager = new JsonOutputManager();
+        var generator = new ASTGenerator(outputManager, verbose: true); // Use concurrent mode (default)
         try
         {
-            await generator.GenerateASTAsync(testFilePath, outputDir, "json");
+            await generator.GenerateASTAsync(testFilePath, outputDir);
 
             // Assert - Verify structured output was created
             Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
@@ -54,10 +65,10 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
 
         // Act - Generate AST with structured output
-        var generator = new ASTGenerator(verbose: true);
+        var generator = new ASTGenerator(CreateOutputManager(), verbose: true);
         try
         {
-            await generator.GenerateASTAsync(testFilePath, outputDir, "json");
+            await generator.GenerateASTAsync(testFilePath, outputDir);
 
             // Assert - Verify structured output was created
             Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
@@ -91,10 +102,10 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(applicationPath).Should().BeTrue($"Test application project should exist: {applicationPath}");
 
         // Act - Generate AST for the application project
-        var generator = new ASTGenerator(verbose: true);
+        var generator = new ASTGenerator(CreateOutputManager(), verbose: true);
         try
         {
-            await generator.GenerateASTAsync(applicationPath, outputDir, "json");
+            await generator.GenerateASTAsync(applicationPath, outputDir);
 
             // Assert - Verify structured output was created
             Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
@@ -148,10 +159,10 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(testFilePath).Should().BeTrue($"Test file should exist: {testFilePath}");
 
         // Act - Generate AST with structured output
-        var generator = new ASTGenerator(verbose: true);
+        var generator = new ASTGenerator(CreateOutputManager(), verbose: true);
         try
         {
-            await generator.GenerateASTAsync(testFilePath, outputDir, "json");
+            await generator.GenerateASTAsync(testFilePath, outputDir);
 
             // Assert - Verify structured output was created
             Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
@@ -186,10 +197,10 @@ public class StructuredOutputDemonstrationTests : TestBase
         File.Exists(applicationPath).Should().BeTrue($"Test VB application project should exist: {applicationPath}");
 
         // Act - Generate AST for the VB application project
-        var generator = new ASTGenerator(verbose: true);
+        var generator = new ASTGenerator(CreateOutputManager(), verbose: true);
         try
         {
-            await generator.GenerateASTAsync(applicationPath, outputDir, "json");
+            await generator.GenerateASTAsync(applicationPath, outputDir);
 
             // Assert - Verify structured output was created
             Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
@@ -203,6 +214,65 @@ public class StructuredOutputDemonstrationTests : TestBase
             outputFiles.Should().NotBeEmpty("Should create output files for the VB application");
             
             _logger.LogInformation($"Structured VB application output created at: {outputDir}");
+            _logger.LogInformation($"Generated {outputFiles.Length} output files");
+        }
+        finally
+        {
+            generator.Dispose();
+        }
+    }
+
+    [Fact]
+    public async Task GenerateStructuredOutput_NetFramework48Console_ShouldCreateOrganizedOutput()
+    {
+        // Arrange - Test with .NET Framework 4.8 console application source files
+        var sourceFiles = new[]
+        {
+            Path.Combine(_testFilesPath, "TestApplications", "NetFramework48Console", "Program.cs"),
+            Path.Combine(_testFilesPath, "TestApplications", "NetFramework48Console", "BusinessLogic.cs"),
+            Path.Combine(_testFilesPath, "TestApplications", "NetFramework48Console", "Models", "Product.cs"),
+            Path.Combine(_testFilesPath, "TestApplications", "NetFramework48Console", "Services", "ProductService.cs")
+        };
+        
+        var outputDir = CreateApplicationOutputPath("NetFramework48Console", "GenerateStructuredOutput_NetFramework48Console");
+        
+        // Assert all source files exist
+        foreach (var sourceFile in sourceFiles)
+        {
+            File.Exists(sourceFile).Should().BeTrue($"Source file should exist: {sourceFile}");
+        }
+
+        // Act - Generate AST for each source file
+        var generator = new ASTGenerator(CreateOutputManager(), verbose: true);
+        try
+        {
+            foreach (var sourceFile in sourceFiles)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(sourceFile);
+                var fileOutputDir = Path.Combine(outputDir, fileName);
+                await generator.GenerateASTAsync(sourceFile, fileOutputDir);
+            }
+
+            // Assert - Verify structured output was created
+            Directory.Exists(outputDir).Should().BeTrue("Output directory should be created");
+            
+            // Verify output files were created for each source file
+            var outputFiles = Directory.GetFiles(outputDir, "*.json", SearchOption.AllDirectories);
+            outputFiles.Should().NotBeEmpty("Should create output files for the .NET Framework application");
+            
+            // Verify specific files were processed
+            var outputContent = string.Empty;
+            foreach (var outputFile in outputFiles)
+            {
+                var content = await File.ReadAllTextAsync(outputFile);
+                outputContent += content;
+            }
+            
+            outputContent.Should().Contain("NetFramework48Console", "Output should reference the namespace");
+            outputContent.Should().Contain("Product", "Output should contain the Product class");
+            outputContent.Should().Contain("ProductService", "Output should contain the ProductService class");
+            
+            _logger.LogInformation($"Structured .NET Framework output created at: {outputDir}");
             _logger.LogInformation($"Generated {outputFiles.Length} output files");
         }
         finally

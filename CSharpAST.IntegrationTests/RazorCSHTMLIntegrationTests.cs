@@ -2,6 +2,7 @@ using FluentAssertions;
 using CSharpAST.Core;
 using CSharpAST.Core.Processing;
 using CSharpAST.Core.Analysis;
+using CSharpAST.Core.Output;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
@@ -122,14 +123,15 @@ namespace CSharpAST.IntegrationTests
         public async Task ASTGenerator_CreateUnified_ShouldProcessRazorFiles()
         {
             // Arrange
-            var generator = ASTGenerator.CreateUnified(verbose: false);
+            var outputManager = new JsonOutputManager();
+            var generator = ASTGenerator.CreateUnified(outputManager, verbose: false);
             var razorFilePath = Path.Combine(_testFilesPath, "SingleFiles", "Razor", "RazorSample.cshtml");
             var outputPath = CreateStructuredOutputPath("SingleFiles/Razor/RazorSample.cshtml", "ASTGenerator_CreateUnified_ShouldProcessRazorFiles");
 
             try
             {
                 // Act
-                await generator.GenerateASTAsync(razorFilePath, outputPath, "json");
+                await generator.GenerateASTAsync(razorFilePath, outputPath);
 
                 // Assert - check what files were actually created (ASTGenerator creates the filename)
                 var expectedFileName = Path.GetFileNameWithoutExtension(razorFilePath);

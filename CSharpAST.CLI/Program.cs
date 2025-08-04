@@ -1,9 +1,10 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using System.CommandLine.Binding;
 using System.CommandLine.Parsing;
 using CSharpAST.Core;
 using CSharpAST.Core.Analysis;
 using CSharpAST.Core.Processing;
+using CSharpAST.Core.Output;
 
 namespace CSharpAST.CLI;
 
@@ -98,7 +99,7 @@ class Program
             description: "Output format",
             getDefaultValue: () => "json");
 
-        option.FromAmong("json", "xml", "yaml");
+        option.FromAmong("json", "xml", "yaml", "text");
         return option;
     }
 
@@ -130,11 +131,27 @@ class Program
             getDefaultValue: () => Math.Min(Environment.ProcessorCount * 2, 16));
     }
 
+    /// <summary>
+    /// Creates the appropriate output manager based on the format
+    /// </summary>
+    private static IOutputManager CreateOutputManager(string format)
+    {
+        return format.ToLowerInvariant() switch
+        {
+            "json" => new JsonOutputManager(),
+            "text" or "txt" => new TextOutputManager(),
+            _ => throw new ArgumentException($"Unsupported output format: {format}")
+        };
+    }
+
     private static async Task ProcessInputsAsync(List<string> inputs, string outputPath, string format, 
         string processor, bool verbose, int concurrency)
     {
         try
         {
+            // Create appropriate output manager based on format
+            var outputManager = CreateOutputManager(format);
+            
             // Create appropriate AST generator based on processor type
             var processingMode = processor switch
             {
@@ -143,7 +160,7 @@ class Program
                 _ => throw new ArgumentException($"Unknown processor type: {processor}")
             };
 
-            var generator = new ASTGenerator(processingMode, verbose, concurrency);
+            var generator = new ASTGenerator(outputManager, processingMode, verbose, concurrency);
 
             if (verbose)
             {
@@ -197,7 +214,7 @@ class Program
                 Console.WriteLine($"Processing solution: {Path.GetFileName(solutionFile)}");
 
             var outputDir = Path.Combine(outputPath, "Solutions", Path.GetFileNameWithoutExtension(solutionFile));
-            await generator.GenerateASTAsync(solutionFile, outputDir, format);
+            await generator.GenerateASTAsync(solutionFile, outputDir);
         }
     }
 
@@ -210,7 +227,7 @@ class Program
                 Console.WriteLine($"Processing project: {Path.GetFileName(projectFile)}");
 
             var outputDir = Path.Combine(outputPath, "Projects", Path.GetFileNameWithoutExtension(projectFile));
-            await generator.GenerateASTAsync(projectFile, outputDir, format);
+            await generator.GenerateASTAsync(projectFile, outputDir);
         }
     }
 
@@ -225,7 +242,7 @@ class Program
                 Console.WriteLine($"Processing source file: {Path.GetFileName(sourceFile)}");
 
             var outputDir = Path.Combine(outputPath, "SourceFiles", Path.GetFileNameWithoutExtension(sourceFile));
-            await generator.GenerateASTAsync(sourceFile, outputDir, format);
+            await generator.GenerateASTAsync(sourceFile, outputDir);
         }
         else
         {

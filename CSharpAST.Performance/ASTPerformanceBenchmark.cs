@@ -2,6 +2,7 @@ using System.Diagnostics;
 using CSharpAST.Core;
 using CSharpAST.Core.Analysis;
 using CSharpAST.Core.Processing;
+using CSharpAST.Core.Output;
 
 namespace CSharpAST.Performance;
 
@@ -75,7 +76,7 @@ public class ASTPerformanceBenchmark
         var optimizedTimes = new List<long>();
 
         // Standard implementation
-        var standardGenerator = new ASTGenerator();
+        var outputManager = new JsonOutputManager(); var standardGenerator = new ASTGenerator(outputManager);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
@@ -85,7 +86,7 @@ public class ASTPerformanceBenchmark
         }
 
         // Concurrent implementation
-        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
+        var outputManager2 = new JsonOutputManager(); using var concurrentGenerator = new ASTGenerator(outputManager2, ASTGenerator.ProcessingMode.Concurrent);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
@@ -131,7 +132,7 @@ public class ASTPerformanceBenchmark
         var optimizedTimes = new List<long>();
 
         // Standard implementation (sequential)
-        var standardGenerator = new ASTGenerator();
+        var outputManager = new JsonOutputManager(); var standardGenerator = new ASTGenerator(outputManager);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
@@ -144,12 +145,12 @@ public class ASTPerformanceBenchmark
         }
 
         // Concurrent implementation
-        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
+        var outputManager2 = new JsonOutputManager(); using var concurrentGenerator = new ASTGenerator(outputManager2, ASTGenerator.ProcessingMode.Concurrent);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
             var tempDir = Path.GetTempPath();
-            await concurrentGenerator.GenerateASTAsync(Path.GetDirectoryName(filePaths[0]) ?? "", tempDir, "json");
+            await concurrentGenerator.GenerateASTAsync(Path.GetDirectoryName(filePaths[0]) ?? "", tempDir);
             sw.Stop();
             optimizedTimes.Add(sw.ElapsedMilliseconds);
         }
@@ -192,7 +193,7 @@ public class ASTPerformanceBenchmark
         var optimizedTimes = new List<long>();
 
         // Standard implementation
-        var standardGenerator = new ASTGenerator();
+        var outputManager = new JsonOutputManager(); var standardGenerator = new ASTGenerator(outputManager);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
@@ -202,7 +203,7 @@ public class ASTPerformanceBenchmark
         }
 
         // Concurrent implementation
-        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
+        var outputManager2 = new JsonOutputManager(); using var concurrentGenerator = new ASTGenerator(outputManager2, ASTGenerator.ProcessingMode.Concurrent);
         for (int i = 0; i < iterations; i++)
         {
             var sw = Stopwatch.StartNew();
@@ -240,8 +241,8 @@ public class ASTPerformanceBenchmark
         if (_verbose)
             Console.WriteLine("Warming up JIT...");
 
-        var standardGenerator = new ASTGenerator();
-        using var concurrentGenerator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent);
+        var outputManager = new JsonOutputManager(); var standardGenerator = new ASTGenerator(outputManager);
+        var outputManager2 = new JsonOutputManager(); using var concurrentGenerator = new ASTGenerator(outputManager2, ASTGenerator.ProcessingMode.Concurrent);
 
         foreach (var file in files)
         {

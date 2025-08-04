@@ -20,6 +20,19 @@ This document provides comprehensive technical specifications for the CSharpAST 
 ### Purpose
 CSharpAST is a high-performance Abstract Syntax Tree (AST) generation and analysis tool for C# source code, built on Microsoft's Roslyn compiler APIs. It provides deep code analysis, async pattern detection, and automated test generation capabilities.
 
+### Key Capabilities
+- **Deep AST Generation**: Complete syntax tree generation with node-level details for C#, VB.NET, and Razor files
+- **Multi-Language Support**: Unified processing of C#, VB.NET, and Razor/CSHTML files with intelligent analyzer selection
+- **MVC Pattern Support**: AST analysis of ASP.NET MVC components including controllers, views, and Razor rendering
+- **Async Pattern Detection**: Comprehensive analysis of async/await patterns and task-based operations
+- **Cross-File Analysis**: Project and solution-level analysis with dependency tracking
+- **Performance Optimization**: Concurrent processing with intelligent load balancing
+
+### Roadmap Features
+- **Data Flow Analysis**: End-to-end tracking of data flow from user input through controllers to view output (*planned*)
+- **Security Analysis**: Automated detection of security vulnerabilities and best practices (*planned*)
+- **Advanced Cross-Reference Analysis**: Deep relationship mapping between controllers, views, models, and services (*planned*)
+
 ### Technology Stack
 - **.NET 8.0**: Target framework for all projects
 - **Microsoft.CodeAnalysis.CSharp 4.8.0+**: Roslyn compiler APIs
@@ -138,6 +151,82 @@ public class ProjectAnalysis
     public List<string> Dependencies { get; set; } = new List<string>();
     public List<ClassInfo> TestClasses { get; set; } = new List<ClassInfo>();
     public List<AsyncPatternInfo> AsyncPatterns { get; set; } = new List<AsyncPatternInfo>();
+}
+```
+
+## Roadmap Data Models
+
+### DataFlowAnalysis (*Planned Feature*)
+Comprehensive data flow tracking for MVC applications - part of the planned roadmap.
+
+```csharp
+public class DataFlowAnalysis
+{
+    public string RequestPath { get; set; } = string.Empty;                          // HTTP route path
+    public List<DataFlowSegment> FlowSegments { get; set; } = new List<DataFlowSegment>();
+    public List<UserInputPoint> InputPoints { get; set; } = new List<UserInputPoint>();
+    public List<ViewOutputPoint> OutputPoints { get; set; } = new List<ViewOutputPoint>();
+    public List<DataTransformation> Transformations { get; set; } = new List<DataTransformation>();
+    public List<SecurityCheckpoint> SecurityChecks { get; set; } = new List<SecurityCheckpoint>();
+}
+
+public class DataFlowSegment
+{
+    public string SegmentType { get; set; } = string.Empty;    // "UserInput", "Controller", "Service", "View", "Output"
+    public string SourceFile { get; set; } = string.Empty;     // File containing this segment
+    public string Method { get; set; } = string.Empty;         // Method or action name
+    public List<DataPoint> DataPoints { get; set; } = new List<DataPoint>();
+    public Dictionary<string, object> Metadata { get; set; } = new Dictionary<string, object>();
+}
+
+public class DataPoint
+{
+    public string Name { get; set; } = string.Empty;           // Variable/property name
+    public string Type { get; set; } = string.Empty;           // Data type
+    public string Source { get; set; } = string.Empty;         // Where data comes from
+    public string Destination { get; set; } = string.Empty;    // Where data goes to
+    public List<string> ValidationRules { get; set; } = new List<string>();
+    public bool IsUserInput { get; set; }                      // Directly from user
+    public bool IsUserOutput { get; set; }                     // Directly to user
+    public int LineNumber { get; set; }
+}
+
+public class UserInputPoint
+{
+    public string ParameterName { get; set; } = string.Empty;
+    public string ParameterType { get; set; } = string.Empty;
+    public string BindingSource { get; set; } = string.Empty;  // "Body", "Query", "Route", "Form"
+    public List<string> ValidationAttributes { get; set; } = new List<string>();
+    public string ControllerAction { get; set; } = string.Empty;
+    public int LineNumber { get; set; }
+}
+
+public class ViewOutputPoint
+{
+    public string ViewPath { get; set; } = string.Empty;
+    public string ModelType { get; set; } = string.Empty;
+    public List<string> DisplayedProperties { get; set; } = new List<string>();
+    public List<string> UserInteractionElements { get; set; } = new List<string>();  // Forms, links, buttons
+    public int LineNumber { get; set; }
+}
+
+public class DataTransformation
+{
+    public string TransformationType { get; set; } = string.Empty;  // "Mapping", "Validation", "Formatting", "Calculation"
+    public string SourceType { get; set; } = string.Empty;
+    public string TargetType { get; set; } = string.Empty;
+    public string Method { get; set; } = string.Empty;
+    public string Logic { get; set; } = string.Empty;              // Transformation logic/expression
+    public int LineNumber { get; set; }
+}
+
+public class SecurityCheckpoint 
+{
+    public string CheckType { get; set; } = string.Empty;          // "Authorization", "Validation", "Sanitization"
+    public string Method { get; set; } = string.Empty;
+    public List<string> Rules { get; set; } = new List<string>();
+    public bool IsApplied { get; set; }
+    public int LineNumber { get; set; }
 }
 ```
 
@@ -460,6 +549,111 @@ dotnet run --project CSharpAST.CLI -- [options]
       "properties": ["IsEnabled", "Timeout"]
     }
   ]
+}
+```
+
+### Data Flow Analysis JSON Example (*Planned Feature*)
+For MVC applications, the tool will be able to generate comprehensive data flow analysis:
+
+> **Note**: This feature is part of the planned roadmap and is not yet implemented. The example below shows the intended output format for future data flow analysis capabilities.
+
+```json
+{
+  "dataFlowAnalysis": {
+    "requestPath": "/Books/Index",
+    "flowSegments": [
+      {
+        "segmentType": "UserInput",
+        "sourceFile": "Controllers/BooksController.cs",
+        "method": "Index",
+        "dataPoints": [
+          {
+            "name": "searchTerm",
+            "type": "string",
+            "source": "QueryString",
+            "destination": "BookService.SearchBooksAsync",
+            "validationRules": [],
+            "isUserInput": true,
+            "lineNumber": 23
+          }
+        ]
+      },
+      {
+        "segmentType": "Controller",
+        "sourceFile": "Controllers/BooksController.cs", 
+        "method": "Index",
+        "dataPoints": [
+          {
+            "name": "books",
+            "type": "IEnumerable<Book>",
+            "source": "BookService.SearchBooksAsync",
+            "destination": "BookListViewModel.Books",
+            "lineNumber": 33
+          },
+          {
+            "name": "viewModel",
+            "type": "BookListViewModel",
+            "source": "Controller Logic",
+            "destination": "View",
+            "lineNumber": 48
+          }
+        ]
+      },
+      {
+        "segmentType": "View",
+        "sourceFile": "Views/Books/Index.cshtml",
+        "method": "RenderView",
+        "dataPoints": [
+          {
+            "name": "Model.Books",
+            "type": "IEnumerable<Book>",
+            "source": "ViewModel",
+            "destination": "HTML Output",
+            "isUserOutput": true,
+            "lineNumber": 85
+          }
+        ]
+      }
+    ],
+    "inputPoints": [
+      {
+        "parameterName": "searchTerm",
+        "parameterType": "string",
+        "bindingSource": "Query",
+        "validationAttributes": [],
+        "controllerAction": "BooksController.Index",
+        "lineNumber": 23
+      }
+    ],
+    "outputPoints": [
+      {
+        "viewPath": "Views/Books/Index.cshtml",
+        "modelType": "BookListViewModel",
+        "displayedProperties": ["Books", "SearchTerm", "TotalBooks"],
+        "userInteractionElements": ["SearchForm", "GenreFilter", "PaginationLinks"],
+        "lineNumber": 85
+      }
+    ],
+    "transformations": [
+      {
+        "transformationType": "Mapping",
+        "sourceType": "IEnumerable<Book>",
+        "targetType": "BookListViewModel",
+        "method": "BooksController.Index",
+        "logic": "new BookListViewModel { Books = pagedBooks, SearchTerm = searchTerm }",
+        "lineNumber": 48
+      }
+    ],
+    "securityChecks": [
+      {
+        "checkType": "Authorization",
+        "method": "BooksController",
+        "rules": ["Authenticated Users"],
+        "isApplied": true,
+        "lineNumber": 10
+      }
+    ]
+  }
 }
 ```
 

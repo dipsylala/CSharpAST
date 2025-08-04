@@ -1,0 +1,35 @@
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>.NET Framework 4.8</h1>
+    <p class="lead">This is a test MVC application built with .NET Framework 4.8 for CSharpAST analysis testing.</p>
+    <p><a href="@Url.Action("Index", "Products")" class="btn btn-primary btn-lg">View Products &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            This application demonstrates classic ASP.NET MVC patterns including:
+        </p>
+        <ul>
+            <li>MVC Controllers with Actions</li>
+            <li>Razor Views with Layouts</li>
+            <li>Data Models with Validation</li>
+            <li>ViewModels for complex data</li>
+        </ul>
+        <p><a class="btn btn-default" href="@Url.Action("About")">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Products</h2>
+        <p>Explore the Products section to see CRUD operations in action with traditional MVC patterns.</p>
+        <p><a class="btn btn-default" href="@Url.Action("Index", "Products")">View Products &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>AST Analysis</h2>
+        <p>This application serves as a test case for CSharpAST to analyze .NET Framework 4.8 applications.</p>
+        <p><a class="btn btn-default" href="@Url.Action("Contact")">Contact &raquo;</a></p>
+    </div>
+</div>

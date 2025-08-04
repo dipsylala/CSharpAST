@@ -1,0 +1,27 @@
+﻿{
+  "SourceFile": "C:\\Users\\mwatson\\Documents\\github\\CSharpAST\\TestFiles\\TestApplications\\NetFramework48Console\\NetFramework48Console.csproj",
+  "GeneratedAt": "2025-08-04T13:01:26.7607984Z",
+  "RootNode": {
+    "Type": "ProjectRoot",
+    "Kind": "Project",
+    "Text": "Project: NetFramework48Console.csproj",
+    "Span": {
+      "Start": 0,
+      "End": 0,
+      "Length": 0
+    },
+    "Location": {
+      "Path": "",
+      "Span": {},
+      "HasMappedPath": false
+    },
+    "Properties": {
+      "ProjectPath": "C:\\Users\\mwatson\\Documents\\github\\CSharpAST\\TestFiles\\TestApplications\\NetFramework48Console\\NetFramework48Console.csproj",
+      "FileCount": 0,
+      "ProjectType": ".csproj",
+      "ParsedFromProjectFile": true,
+      "SupportedExtensions": ".cs, .cshtml, .razor"
+    },
+    "Children": []
+  }
+}

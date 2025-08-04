@@ -1,4 +1,5 @@
 using CSharpAST.Core;
+using CSharpAST.Core.Output;
 using CSharpAST.Performance;
 
 namespace CSharpAST.PerformanceTest;
@@ -116,7 +117,7 @@ class Program
         
         foreach (var maxConcurrency in concurrencyLevels)
         {
-            using var generator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent, false, maxConcurrency);
+            var outputManager = new JsonOutputManager(); using var generator = new ASTGenerator(outputManager, ASTGenerator.ProcessingMode.Concurrent, false, maxConcurrency);
             
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             
@@ -174,7 +175,7 @@ class Program
                 
                 var memoryBefore = GC.GetTotalMemory(false);
                 
-                using var generator = new ASTGenerator(ASTGenerator.ProcessingMode.Concurrent, false, threadCount);
+                var outputManager = new JsonOutputManager(); using var generator = new ASTGenerator(outputManager, ASTGenerator.ProcessingMode.Concurrent, false, threadCount);
                 
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 

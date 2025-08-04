@@ -1,0 +1,59 @@
+@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        <p>This is a .NET Framework 4.8 MVC application designed to test CSharpAST's ability to analyze legacy .NET Framework applications.</p>
+        
+        <h4>Technical Stack:</h4>
+        <ul>
+            <li><strong>.NET Framework:</strong> 4.8</li>
+            <li><strong>ASP.NET MVC:</strong> 5.2.9</li>
+            <li><strong>Entity Framework:</strong> 6.4.4</li>
+            <li><strong>Bootstrap:</strong> 3.4.1</li>
+            <li><strong>jQuery:</strong> 3.4.1</li>
+        </ul>
+
+        <h4>Features Demonstrated:</h4>
+        <ul>
+            <li>Traditional MVC Controllers with ActionResults</li>
+            <li>Razor Views with Master Layouts</li>
+            <li>Data Annotations for Model Validation</li>
+            <li>ViewModels for complex view data</li>
+            <li>Bundle and Minification configuration</li>
+            <li>Global.asax Application lifecycle</li>
+            <li>Web.config configuration</li>
+        </ul>
+
+        <h4>AST Analysis Target Areas:</h4>
+        <ul>
+            <li>Controller inheritance patterns</li>
+            <li>Action method routing</li>
+            <li>View rendering calls</li>
+            <li>Model binding and validation</li>
+            <li>Dependency injection patterns</li>
+            <li>Filter attributes</li>
+            <li>HTTP verb handling</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h4>Analysis Notes</h4>
+            </div>
+            <div class="panel-body">
+                <p>This application uses traditional .NET Framework patterns that differ from modern .NET Core/5+ applications.</p>
+                <p>Key differences include:</p>
+                <ul>
+                    <li>System.Web namespace usage</li>
+                    <li>Web.config instead of appsettings.json</li>
+                    <li>Global.asax instead of Startup.cs</li>
+                    <li>packages.config instead of PackageReference</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using CSharpAST.Core;
+using CSharpAST.Core.Output;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -114,7 +115,7 @@ public class ASTPerformanceIntegrationTests : TestBase
         var stopwatch = Stopwatch.StartNew();
 
         // Act
-        var generator = new ASTGenerator(verbose: true);
+        var outputManager = new JsonOutputManager(); var generator = new ASTGenerator(outputManager, verbose: true);
         
         // Use ProcessProjectAsync directly which works correctly
         var astAnalysis = await generator.ProcessProjectAsync(testProjectFile);

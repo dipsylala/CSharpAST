@@ -1,0 +1,22 @@
+﻿{
+  "GeneratedAt": "2025-08-04T13:01:18.3968338Z",
+  "SourceFile": "C:\\Users\\mwatson\\Documents\\github\\CSharpAST\\TestFiles\\TestApplications\\BasicDLL\\BasicDLL.csproj",
+  "TotalFiles": 3,
+  "ProjectStructure": [
+    {
+      "Type": "CompilationUnitSyntax",
+      "Kind": "8840",
+      "Properties": {}
+    },
+    {
+      "Type": "CompilationUnitSyntax",
+      "Kind": "8840",
+      "Properties": {}
+    },
+    {
+      "Type": "CompilationUnitSyntax",
+      "Kind": "8840",
+      "Properties": {}
+    }
+  ]
+}

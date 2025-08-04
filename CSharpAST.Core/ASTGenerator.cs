@@ -33,11 +33,11 @@ public class ASTGenerator : IDisposable
     }
 
     /// <summary>
-    /// Creates an ASTGenerator with the specified processing mode
+    /// Creates an ASTGenerator with the specified processing mode and output manager
     /// </summary>
-    public ASTGenerator(ProcessingMode mode = ProcessingMode.Concurrent, bool verbose = false, int? maxConcurrency = null)
+    public ASTGenerator(IOutputManager outputManager, ProcessingMode mode = ProcessingMode.Concurrent, bool verbose = false, int? maxConcurrency = null)
     {
-        _outputManager = new OutputManager();
+        _outputManager = outputManager ?? throw new ArgumentNullException(nameof(outputManager));
         _verbose = verbose;
         _maxConcurrency = maxConcurrency;
         _processingMode = mode;
@@ -46,12 +46,12 @@ public class ASTGenerator : IDisposable
     /// <summary>
     /// Factory method to create a unified ASTGenerator for sequential processing
     /// </summary>
-    public static ASTGenerator CreateUnified(bool verbose = false, int? maxConcurrency = null)
+    public static ASTGenerator CreateUnified(IOutputManager outputManager, bool verbose = false, int? maxConcurrency = null)
     {
-        return new ASTGenerator(ProcessingMode.Unified, verbose, maxConcurrency);
+        return new ASTGenerator(outputManager, ProcessingMode.Unified, verbose, maxConcurrency);
     }
 
-    public async Task GenerateASTAsync(string inputPath, string outputPath, string format)
+    public async Task GenerateASTAsync(string inputPath, string outputPath)
     {
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         
@@ -101,12 +101,12 @@ public class ASTGenerator : IDisposable
                 if (extension == ".sln")
                 {
                     // For solution files, use structured output to preserve directory structure
-                    await _outputManager.WriteStructuredOutputAsync(analysis, outputPath, format, Path.GetDirectoryName(inputPath));
+                    await _outputManager.WriteStructuredOutputAsync(analysis, outputPath, Path.GetDirectoryName(inputPath));
                 }
                 else if (IsProjectFile(inputPath))
                 {
                     // For project files, use structured output to preserve directory structure
-                    await _outputManager.WriteStructuredOutputAsync(analysis, outputPath, format, Path.GetDirectoryName(inputPath));
+                    await _outputManager.WriteStructuredOutputAsync(analysis, outputPath, Path.GetDirectoryName(inputPath));
                 }
                 else
                 {
@@ -115,7 +115,7 @@ public class ASTGenerator : IDisposable
                     var outputFilePath = Path.Combine(outputPath, inputFileName);
                     
                     // Use regular output for single files
-                    await _outputManager.WriteAsync(analysis, outputFilePath, format);
+                    await _outputManager.WriteAsync(analysis, outputFilePath);
                 }
                 
                 stopwatch.Stop();
@@ -397,7 +397,7 @@ public class ASTGenerator : IDisposable
 
     public async Task WriteOutputAsync(ASTAnalysis analysis, string outputPath)
     {
-        await _outputManager.WriteOutputAsync(analysis, outputPath);
+        await _outputManager.WriteAsync(analysis, outputPath);
     }
 
     // Additional legacy methods used by integration tests
