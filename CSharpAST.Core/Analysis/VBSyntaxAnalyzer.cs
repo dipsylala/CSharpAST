@@ -311,19 +311,4 @@ public class VBSyntaxAnalyzer : ISyntaxAnalyzer
         var root = syntaxTree.GetRoot();
         return AnalyzeSyntaxTree(root, filePath);
     }
-
-    public bool SupportsFile(string filePath)
-    {
-        return Capabilities.SupportsFile(filePath);
-    }
-
-    public string[] GetSupportedProjectExtensions()
-    {
-        return Capabilities.SupportedProjectExtensions;
-    }
-
-    public bool SupportsProject(string projectPath)
-    {
-        return Capabilities.SupportsProject(projectPath);
-    }
 }

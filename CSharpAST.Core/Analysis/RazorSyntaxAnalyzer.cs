@@ -307,20 +307,5 @@ namespace CSharpAST.Core.Analysis
             // This method is mainly for C# and VB.NET analyzers.
             throw new NotSupportedException("RazorSyntaxAnalyzer works with file content rather than individual syntax nodes.");
         }
-
-        public bool SupportsFile(string filePath)
-        {
-            return Capabilities.SupportsFile(filePath);
-        }
-
-        public string[] GetSupportedProjectExtensions()
-        {
-            return Capabilities.SupportedProjectExtensions;
-        }
-
-        public bool SupportsProject(string projectPath)
-        {
-            return Capabilities.SupportsProject(projectPath);
-        }
     }
 }

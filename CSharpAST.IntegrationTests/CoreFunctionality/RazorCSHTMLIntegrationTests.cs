@@ -2,7 +2,7 @@ using FluentAssertions;
 using CSharpAST.Core;
 using CSharpAST.Core.Processing;
 using CSharpAST.Core.Analysis;
-using CSharpAST.Core.Output;
+using CSharpAST.Core.OutputManager;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;

@@ -1,5 +1,5 @@
 using CSharpAST.Core;
-using CSharpAST.Core.Output;
+using CSharpAST.Core.OutputManager;
 using CSharpAST.Performance;
 
 namespace CSharpAST.PerformanceTest;

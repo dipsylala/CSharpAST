@@ -15,7 +15,7 @@ public class VBAnalyzerDebugTests
         var vbFilePath = "test.vb";
 
         // Act
-        var supportsFile = analyzer.SupportsFile(vbFilePath);
+        var supportsFile = analyzer.Capabilities.SupportsFile(vbFilePath);
 
         // Assert
         supportsFile.Should().BeTrue("VB Analyzer should support .vb files");

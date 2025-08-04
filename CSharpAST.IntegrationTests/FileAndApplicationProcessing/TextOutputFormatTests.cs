@@ -1,6 +1,6 @@
 using FluentAssertions;
 using CSharpAST.Core;
-using CSharpAST.Core.Output;
+using CSharpAST.Core.OutputManager;
 
 namespace CSharpAST.IntegrationTests;
 

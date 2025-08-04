@@ -7,7 +7,7 @@ using System.Text;
 using System.Diagnostics;
 using CSharpAST.Core.Analysis;
 using CSharpAST.Core.Processing;
-using CSharpAST.Core.Output;
+using CSharpAST.Core.OutputManager;
 
 namespace CSharpAST.Core;
 
